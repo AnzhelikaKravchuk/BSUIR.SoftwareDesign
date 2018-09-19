@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Herman Stashynski: Software Design Labs</string>
+    <string name="version">Application Version:</string>
+    <string name="IMEI">Device IMEI: </string>
+    <string name="allowReadPhoneState">Allow READ_PHONE_STATE permission</string>
+</resources>
