@@ -20,17 +20,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initializing permission const
         READ_PHONE_STATE = getResources().getString(R.string.allowReadPhoneState);
 
-        // Setting version name to layout
         TextView versionTextView = findViewById(R.id.versionTextView);
-        String versionName = BuildConfig.VERSION_NAME;
+        String versionName = BuildConfig.VERSION_NAME ;
         versionTextView.setText(versionName);
 
-        // Checking READ_PHONE_STATE permission
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            // Asking for permission
             ActivityCompat.requestPermissions(
                     this,
                     new String[]{Manifest.permission.READ_PHONE_STATE},

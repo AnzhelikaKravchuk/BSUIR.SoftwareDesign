@@ -10,7 +10,7 @@ buildscript {
 import org.ajoberstar.grgit.Grgit
 
 ext {
-    git = Grgit.open(currentDir: projectDir)
+    git = Grgit.open(currentDir: rootDir)
     gitVersionName = git.describe()
     gitVersionCode = git.tag.list().size()
     gitVersionCodeTime = git.head().time
