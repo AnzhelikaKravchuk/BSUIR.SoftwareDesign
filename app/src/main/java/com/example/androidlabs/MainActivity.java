@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            // Processing permission results
             case MY_PERMISSIONS_REQUEST_READ_PHONE_STATE: {
                 String IMEI = READ_PHONE_STATE;
 

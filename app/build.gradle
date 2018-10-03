@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply from: "$project.rootDir/script-git-version.gradle"
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
@@ -17,14 +16,49 @@ android {
     }
 
     compileSdkVersion 28
-    defaultConfig {
 
+    def getVersionName = { ->
+        def major = "0"
+        def date = new ByteArrayOutputStream()
+        def patch = new ByteArrayOutputStream()
+        def minor = new ByteArrayOutputStream()
+
+        exec {
+            commandLine 'git', 'rev-list', '--count', 'master'
+            standardOutput = minor
+        }
+        minor = (Integer.valueOf(minor.toString().trim()) - 1).toString()
+
+        exec {
+            commandLine 'git', 'log', '--pretty=format:\"%cd\"', '-n', '1', 'master'
+            standardOutput = date
+        }
+        exec {
+            commandLine 'git', 'rev-list', '--count', 'develop', '--since', date.toString().trim()
+            standardOutput = patch
+        }
+        patch = (Integer.valueOf(patch.toString().trim()) - 1).toString()
+
+        return "${major}.${minor}.${patch}"
+    }
+    def getVersionCode = { ->
+        def code = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-list', '--all', '--count'
+            standardOutput = code
+        }
+        return Integer.valueOf(code.toString().trim())
+    }
+
+
+
+    defaultConfig {
 
         applicationId "com.example.androidlabs"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode gitVersionCode
-        versionName gitVersionCode.toString()// gitVersionName
+        versionCode getVersionCode()
+        versionName getVersionName()
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -40,8 +74,8 @@ android {
     productFlavors {
         dev {
             dimension "version"
-            versionCode gitVersionCodeTime
-            versionName gitVersionCode.toString()
+            versionCode getVersionCode()
+            versionName getVersionName()
 
             versionNameSuffix "-dev"
             signingConfig signingConfigs.signing
@@ -52,9 +86,8 @@ android {
             dimension "version"
             signingConfig signingConfigs.signing
 
-
-            versionCode gitVersionCode
-            versionName gitVersionCode.toString()
+            versionCode getVersionCode()
+            versionName getVersionName()
         }
     }
 }
