@@ -18,28 +18,15 @@ android {
     compileSdkVersion 28
 
     def getVersionName = { ->
-        def major = "0"
-        def date = new ByteArrayOutputStream()
-        def patch = new ByteArrayOutputStream()
-        def minor = new ByteArrayOutputStream()
+        def version = new ByteArrayOutputStream()
 
         exec {
-            commandLine 'git', 'rev-list', '--count', 'master'
-            standardOutput = minor
+            commandLine 'git', 'describe', '--tags'
+            standardOutput = version
         }
-        minor = (Integer.valueOf(minor.toString().trim()) - 1).toString()
+        version = version.toString().trim()
 
-        exec {
-            commandLine 'git', 'log', '--pretty=format:\"%cd\"', '-n', '1', 'master'
-            standardOutput = date
-        }
-        exec {
-            commandLine 'git', 'rev-list', '--count', 'develop', '--since', date.toString().trim()
-            standardOutput = patch
-        }
-        patch = (Integer.valueOf(patch.toString().trim()) - 1).toString()
-
-        return "${major}.${minor}.${patch}"
+        return version
     }
     def getVersionCode = { ->
         def code = new ByteArrayOutputStream()
@@ -48,6 +35,12 @@ android {
             standardOutput = code
         }
         return Integer.valueOf(code.toString().trim())
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = applicationId + "-${variant.versionName}.apk"
+        }
     }
 
 
