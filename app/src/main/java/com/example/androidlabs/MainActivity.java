@@ -1,77 +1,120 @@
 package com.example.androidlabs;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
-import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.androidlabs.db.AppDatabase;
+import com.example.androidlabs.db.entities.User;
+import com.google.android.material.navigation.NavigationView;
 
-    private final int REQUEST_READ_PHONE_STATE = 0;
-    private String READ_PHONE_STATE_MESSAGE;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.room.Room;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+public class MainActivity extends AppCompatActivity implements
+        IndexFragment.OnFragmentInteractionListener, profileFragment.OnFragmentInteractionListener,
+        editProfileFragment.OnFragmentInteractionListener{
 
+private DrawerLayout mDrawerLayout;
+private NavController navController;
+
+public static AppDatabase appDatabase;
+public static User currentUser;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        int requestedOrientation = getResources().getInteger(R.integer.screen_orientation);
-        setRequestedOrientation(requestedOrientation);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        READ_PHONE_STATE_MESSAGE = getResources().getString(R.string.allowReadPhoneState);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        TextView versionTextView = findViewById(R.id.versionTextView);
-        String versionName = BuildConfig.VERSION_NAME ;
-        versionTextView.setText(versionName);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{Manifest.permission.READ_PHONE_STATE},
-                    REQUEST_READ_PHONE_STATE
-            );
-        } else {
-
-            TelephonyManager tm = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
-
-            String IMEI;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                IMEI = tm.getImei();
-            } else {
-                IMEI = tm.getDeviceId();
-            }
-
-            setTextToIMEITextView(IMEI);
+        appDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "AppDatabase").allowMainThreadQueries().build();
+        currentUser = MainActivity.appDatabase.userDao().getUser();
+        if (currentUser == null) {
+               Button button = findViewById(R.id.button);
+               button.setVisibility(View.VISIBLE);
         }
-    }
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_READ_PHONE_STATE: {
-                String IMEI = READ_PHONE_STATE_MESSAGE;
+        navController = Navigation.findNavController(this, R.id.my_nav_host_fragment);
 
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    try {
-                        IMEI = ((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
-                    } catch (SecurityException e) {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        NavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
+@Override
+public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        menuItem.setChecked(true);
+        mDrawerLayout.closeDrawers();
 
-                    }
-                }
-                setTextToIMEITextView(IMEI);
-            }
+        switch (menuItem.getItemId()) {
+        case R.id.index_menu_item:
+        navController.navigate(R.id.indexFragment);
+        return true;
+        case R.id.first_menu_item:
+        navController.navigate(R.id.profileFragment);
+        return true;
+
         }
-    }
+        return false;
+        }
+        };
+        navigationView.setNavigationItemSelectedListener(onNavigationItemSelectedListener);
+        }
 
-    private void setTextToIMEITextView(String text) throws SecurityException{
-        TextView IMEITextView = findViewById(R.id.imeiTextView);
-        IMEITextView.setText(text);
-    }
+        public void addUser(View view)
+        {
+                User user = new User();
+                user.email ="111germanstashinskii@gmail.com";
+                user.password ="Hello1";
+                user.id =1;
+                MainActivity.appDatabase.userDao().addUser(user);
+                Button button = findViewById(R.id.button);
+                 button.setVisibility(View.GONE);
+        }
+
+@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+        }
+
+@Override
+public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+        case android.R.id.home:
+        mDrawerLayout.openDrawer(GravityCompat.START);
+        return true;
+
+        case R.id.about_menu_item:
+        navController.navigate(R.id.aboutActivity);
+        return true;
+
+default:
+        return super.onOptionsItemSelected(item);
+        }
+        }
+
+@Override
+public void onFragmentInteraction(Uri uri) {
+        }
+public void openEditableProfile(View view) {
+        navController.navigate(R.id.editProfileFragment);
+        }
+
 }

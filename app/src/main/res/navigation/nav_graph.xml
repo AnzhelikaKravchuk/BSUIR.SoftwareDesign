@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/indexFragment">
+
+    <fragment
+        android:id="@+id/indexFragment"
+        android:name="com.example.androidlabs.IndexFragment"
+        android:label="fragment_index"
+        tools:layout="@layout/fragment_index" >
+        <action
+            android:id="@+id/action_indexFragment_to_firstFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_indexFragment_to_aboutActivity"
+            app:destination="@id/aboutActivity" />
+        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.androidlabs/" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.androidlabs.profileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_firstFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.androidlabs/profile" />
+    </fragment>
+    <activity
+        android:id="@+id/aboutActivity"
+        android:name="com.example.androidlabs.AboutActivity"
+        android:label="activity_about"
+        tools:layout="@layout/activity_about">
+        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.yura.androidlabs/about" />
+    </activity>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.androidlabs.editProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile">
+        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.androidlabs/profile/edit" />
+    </fragment>
+
+</navigation>

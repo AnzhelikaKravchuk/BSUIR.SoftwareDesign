@@ -1,6 +1,23 @@
 <resources>
-    <string name="app_name">Herman Stashynski: Software Design Labs</string>
+    <string name="app_name">Users</string>
     <string name="version">Application Version:</string>
     <string name="IMEI">Device IMEI: </string>
     <string name="allowReadPhoneState">Allow READ_PHONE_STATE permission</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="photo_textview_title">Photo</string>
+    <string name="photo_description">Profile photo</string>
+    <string name="email_textview_title">Email:</string>
+    <string name="password_textview_title">Password:</string>
+    <string name="Change">Change photo</string>
+    <string name="save_button_title">Save</string>
+    <string name="edit_button_title">Edit</string>
+    <string name="profile_menu_item_string">User profile</string>
+    <string name="home_menu_item_string">Home</string>
+    <string name="about_menu_item_string">About</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_index_fragment">Welcome to API</string>
+    <string name="file_photo_name">profile.jpg</string>
 </resources>
