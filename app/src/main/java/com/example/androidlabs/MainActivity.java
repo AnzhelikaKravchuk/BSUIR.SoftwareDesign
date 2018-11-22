@@ -12,19 +12,19 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 0;
-    private String READ_PHONE_STATE;
+    private final int REQUEST_READ_PHONE_STATE = 0;
+    private String READ_PHONE_STATE_MESSAGE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        int requestedOrientation = getResources().getInteger(R.integer.screen_orientation);
-        setRequestedOrientation(requestedOrientation);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        READ_PHONE_STATE = getResources().getString(R.string.allowReadPhoneState);
+        int requestedOrientation = getResources().getInteger(R.integer.screen_orientation);
+        setRequestedOrientation(requestedOrientation);
+
+        READ_PHONE_STATE_MESSAGE = getResources().getString(R.string.allowReadPhoneState);
 
         TextView versionTextView = findViewById(R.id.versionTextView);
         String versionName = BuildConfig.VERSION_NAME ;
@@ -34,12 +34,11 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(
                     this,
                     new String[]{Manifest.permission.READ_PHONE_STATE},
-                    MY_PERMISSIONS_REQUEST_READ_PHONE_STATE
+                    REQUEST_READ_PHONE_STATE
             );
         } else {
 
-            TelephonyManager tm = (TelephonyManager)
-                    getSystemService(this.TELEPHONY_SERVICE);
+            TelephonyManager tm = (TelephonyManager) getSystemService(this.TELEPHONY_SERVICE);
 
             String IMEI;
 
@@ -54,14 +53,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_PHONE_STATE: {
-                String IMEI = READ_PHONE_STATE;
+            case REQUEST_READ_PHONE_STATE: {
+                String IMEI = READ_PHONE_STATE_MESSAGE;
 
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     try {
                         IMEI = ((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId();
                     } catch (SecurityException e) {
@@ -73,8 +70,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    private void setTextToIMEITextView(String text) throws SecurityException {
+    private void setTextToIMEITextView(String text) throws SecurityException{
         TextView IMEITextView = findViewById(R.id.imeiTextView);
         IMEITextView.setText(text);
     }

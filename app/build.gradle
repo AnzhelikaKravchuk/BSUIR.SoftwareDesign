@@ -24,9 +24,8 @@ android {
             commandLine 'git', 'describe', '--tags'
             standardOutput = version
         }
-        version = version.toString().trim()
-
-        return version
+        version = version.toString().split('-')
+        return "${version[0]}.${version[1]}"
     }
     def getVersionCode = { ->
         def code = new ByteArrayOutputStream()
@@ -43,45 +42,47 @@ android {
         }
     }
 
-
-
     defaultConfig {
-
         applicationId "com.example.androidlabs"
         minSdkVersion 23
         targetSdkVersion 28
         versionCode getVersionCode()
         versionName getVersionName()
-
+        signingConfig signingConfigs.signing
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.signing
+
         }
     }
 
     flavorDimensions "version"
+
     productFlavors {
         dev {
             dimension "version"
-            versionCode getVersionCode()
-            versionName getVersionName()
 
             versionNameSuffix "-dev"
-            signingConfig signingConfigs.signing
-
-
         }
         primary {
-            dimension "version"
-            signingConfig signingConfigs.signing
 
-            versionCode getVersionCode()
-            versionName getVersionName()
+            dimension "version"
         }
+        /*
+        free {
+
+            dimension "paid"
+        }
+
+        premium {
+
+            dimension "paid"
+        }*/
+
     }
 }
 
