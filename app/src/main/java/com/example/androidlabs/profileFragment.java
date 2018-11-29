@@ -1,31 +1,18 @@
 package com.example.androidlabs;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link profileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class profileFragment extends Fragment {
+public class profileFragment extends Fragment implements View.OnClickListener{
 
     private OnFragmentInteractionListener mListener;
 
@@ -33,41 +20,29 @@ public class profileFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static profileFragment newInstance(String param1, String param2) {
-        profileFragment fragment = new profileFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+
+        TextView nameTextView = view.findViewById(R.id.nameTextView);
+        TextView surnameTextView = view.findViewById(R.id.surnameTextView);
+        TextView phoneNumberTextView = view.findViewById(R.id.phoneNumberTextView);
         TextView emailTextView = view.findViewById(R.id.emailTextView);
-        TextView passwordTextView = view.findViewById(R.id.passwordTextView);
+
         ImageView photoImageView = view.findViewById(R.id.photoImageView);
 
-         emailTextView.setText(MainActivity.currentUser.email);
-         passwordTextView.setText(MainActivity.currentUser.password);
-         photoImageView.setImageBitmap(loadImageFromStorage(MainActivity.currentUser.pathToPhoto));
+        nameTextView.setText(MainActivity.currentUser.name);
+        surnameTextView.setText(MainActivity.currentUser.surname);
+        phoneNumberTextView.setText(MainActivity.currentUser.phoneNumber);
+        emailTextView.setText(MainActivity.currentUser.email);
+        photoImageView.setImageBitmap(MainActivity.currentUser.loadImageFromStorage());
+
+        Button navigateToEditProfileButton = view.findViewById(R.id.navigateToEditProfileButton);
+        navigateToEditProfileButton.setOnClickListener(this);
 
          return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -87,22 +62,17 @@ public class profileFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.navigateToEditProfileButton:
+                mListener.navigateToEditProfile();
+                break;
+        }
     }
 
-    private Bitmap loadImageFromStorage(String path)
-    {
-        try {
-            File f=new File(path, "profile.jpg");
-            return BitmapFactory.decodeStream(new FileInputStream(f));
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-            return null;
-        }
 
+    public interface OnFragmentInteractionListener {
+        void navigateToEditProfile();
     }
 }

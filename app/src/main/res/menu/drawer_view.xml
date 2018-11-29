@@ -7,5 +7,15 @@
         <item
             android:id="@+id/first_menu_item"
             android:title="@string/profile_menu_item_string" />
+        <item
+            android:id="@+id/logout_menu_item"
+            android:title="@string/logout_menu_item_string"
+            />
+        <item
+            android:id="@+id/create_account_item"
+            android:title="@string/create_item_string" />
+        <item
+            android:id="@+id/About"
+            android:title="@string/about_menu_item_string" />
     </group>
 </menu>

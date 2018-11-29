@@ -9,38 +9,46 @@
         android:id="@+id/indexFragment"
         android:name="com.example.androidlabs.IndexFragment"
         android:label="fragment_index"
-        tools:layout="@layout/fragment_index" >
+        tools:layout="@layout/fragment_index">
         <action
             android:id="@+id/action_indexFragment_to_firstFragment"
             app:destination="@id/profileFragment" />
+        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.yura.androidlabs/" />
+
         <action
-            android:id="@+id/action_indexFragment_to_aboutActivity"
-            app:destination="@id/aboutActivity" />
-        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.androidlabs/" />
+            android:id="@+id/action_indexFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.androidlabs.profileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_firstFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
-        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.androidlabs/profile" />
+        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.yura.androidlabs/profile" />
     </fragment>
-    <activity
-        android:id="@+id/aboutActivity"
-        android:name="com.example.androidlabs.AboutActivity"
-        android:label="activity_about"
-        tools:layout="@layout/activity_about">
-        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.yura.androidlabs/about" />
-    </activity>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.example.androidlabs.editProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile">
-        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.androidlabs/profile/edit" />
+        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.yura.androidlabs/profile/edit" />
     </fragment>
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.example.androidlabs.signInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signInFragment_to_createProfileFragment"
+            app:destination="@id/createProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createProfileFragment"
+        android:name="com.example.androidlabs.createProfileFragment"
+        android:label="fragment_create_profile"
+        tools:layout="@layout/fragment_create_profile" />
 
 </navigation>

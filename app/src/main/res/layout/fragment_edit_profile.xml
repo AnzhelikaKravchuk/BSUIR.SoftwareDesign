@@ -1,75 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".editProfileFragment">
-    <RelativeLayout
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="50dp">
+        android:orientation="vertical"
+        tools:context=".editProfileFragment">
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/userPhotoEditImageView"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="2dp"
-            android:src="@mipmap/default_profile_photo"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp" />
-
-        <Button
-            android:id="@+id/updateUserPhotoButton"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/userPhotoEditImageView"
-            android:layout_marginStart="-102dp"
-            android:layout_marginTop="0dp"
-            android:layout_toEndOf="@id/userPhotoEditImageView"
-            android:text="@string/edit_button_title" />
-    </RelativeLayout>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/userPhotoEditImageView"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="@mipmap/ic_camera"
+                android:src="@mipmap/default_profile_photo"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="2dp" />
+
+        </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginStart="50dp">
-            <TextView
-                android:layout_width="wrap_content"
+            android:layout_marginStart="50dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
 
-                android:text="@string/email_textview_title"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium"
-                android:textColor="@color/colorPrimaryDark" />
+                <com.google.android.material.textfield.TextInputEditText
 
-            <EditText
-                android:id="@+id/emailEditTextView"
-                android:inputType="textEmailAddress"
-                android:layout_width="wrap_content"
+                    android:id="@+id/emailEditTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/email_textview_title"
+                    android:inputType="textEmailAddress"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                    android:textColor="@color/colorPrimaryDark" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
 
-                android:textAppearance="@android:style/TextAppearance.Material.Medium"
-                android:textColor="@color/colorPrimaryDark"
-                android:autofillHints="" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/password_textview_title"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium"
-                android:textColor="@color/colorPrimaryDark" />
-
-            <EditText
-                android:id="@+id/passwordEditTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Material.Medium"
-                android:textColor="@color/colorPrimaryDark" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordEditTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/password_textview_title"
+                    android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                    android:textColor="@color/colorPrimaryDark" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/updateProfileButton"
@@ -77,7 +75,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginEnd="80dp"
-                android:text="@string/save_button_title" />
+                android:text="@string/save_button_title"
+                android:textAllCaps="false" />
         </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

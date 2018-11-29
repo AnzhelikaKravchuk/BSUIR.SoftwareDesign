@@ -20,4 +20,15 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hello_index_fragment">Welcome to API</string>
     <string name="file_photo_name">profile.jpg</string>
+    <string name="name_textview_title">Name</string>
+    <string name="surname_textview_title">Surname</string>
+    <string name="phone_number_textview_title">Phone</string>
+    <string name="create_profile_button_title">Create</string>
+    <string name="signin_button_title">Sign in</string>
+    <string name="move_to_create_user_fragment_button">Create</string>
+    <string name="logout_menu_item_string">Logout</string>
+    <string name="create_item_string">Create new account</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 </resources>

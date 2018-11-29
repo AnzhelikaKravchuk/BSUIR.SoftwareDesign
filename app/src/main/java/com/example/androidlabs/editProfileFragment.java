@@ -2,6 +2,7 @@ package com.example.yura.androidlabs;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,8 +10,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,7 +40,8 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
     private EditText userPasswordEditText;
     private ImageView userPhotoImageView;
 
-    private FragmentActivity homeActivity;
+    private MainActivity homeActivity;
+    private boolean isNewPhotoUploaded = false;
 
     private OnFragmentInteractionListener mListener;
 
@@ -43,49 +49,55 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
         // Required empty public constructor
     }
 
-    public static editProfileFragment newInstance(String param1, String param2) {
-        editProfileFragment fragment = new editProfileFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
-        homeActivity = getActivity();
+        homeActivity = (MainActivity) getActivity();
 
         userEmailEditText = view.findViewById(R.id.emailEditTextView);
         userPasswordEditText = view.findViewById(R.id.passwordEditTextView);
         userPhotoImageView = view.findViewById(R.id.userPhotoEditImageView);
 
         userEmailEditText.setText(currentUser.email);
-        userPasswordEditText.setText(currentUser.password);
-        userPhotoImageView.setImageBitmap(loadImageFromStorage(MainActivity.currentUser.pathToPhoto));
+        userPhotoImageView.setImageBitmap(MainActivity.currentUser.loadImageFromStorage());
 
         Button updateButton = view.findViewById(R.id.updateProfileButton);
-        Button updatePhotoButton = view.findViewById(R.id.updateUserPhotoButton);
         updateButton.setOnClickListener(this);
-        updatePhotoButton.setOnClickListener(this);
-
+        userPhotoImageView.setOnClickListener(this);
         return view;
     }
 
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    @Override
+    public void onStop() {
+        if (isNewPhotoUploaded || !currentUser.email.equals(userEmailEditText.getText().toString()))
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(homeActivity);
+            builder.setTitle("Save changes?")
+                    .setCancelable(false)
+                    .setPositiveButton("Save",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    updateUserProfile();
+                                    int currentDestinationId = mListener.getExcessDestinationId();
+                                    mListener.popFromStackExcessDestination();
+                                    mListener.navigateAfterSavingChanges(currentDestinationId);
+                                }
+                            })
+                    .setNegativeButton(
+                            "discard",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            }
+                    );
+            AlertDialog alert = builder.create();
+            alert.show();
         }
+        super.onStop();
     }
 
     @Override
@@ -107,58 +119,99 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.updateProfileButton:
                 updateUserProfile();
                 break;
-            case R.id.updateUserPhotoButton:
-                dispatchTakePictureIntent();
-            break;
+            case R.id.userPhotoEditImageView:
+                showPictureDialog();
+                break;
         }
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+    private void showPictureDialog() {
+
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(homeActivity);
+        pictureDialog.setTitle("Select Action");
+        String[] pictureDialogItems = {
+                "Select photo from gallery",
+                "Capture photo from camera"};
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                dispatchTakePhotoFromGalleryIntent();
+                                break;
+                            case 1:
+                                dispatchTakePhotoFromCameraIntent();
+                                break;
+                        }
+                    }
+                });
+        pictureDialog.show();
     }
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private void dispatchTakePictureIntent() {
+    public interface OnFragmentInteractionListener {
+        void popFromStackExcessDestination();
+        void navigateAfterSavingChanges(int nextDestinationId);
+        int getExcessDestinationId();
+        void updateUser();
+    }
+
+    private static final int REQUEST_IMAGE_PHOTO = 1;
+    private static final int REQUEST_IMAGE_GALLERY = 2;
+
+    private void dispatchTakePhotoFromCameraIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        this.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        this.startActivityForResult(takePictureIntent, REQUEST_IMAGE_PHOTO);
+    }
+
+    private void dispatchTakePhotoFromGalleryIntent() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        this.startActivityForResult(galleryIntent, REQUEST_IMAGE_GALLERY);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_IMAGE_PHOTO) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
+            isNewPhotoUploaded = true;
             userPhotoImageView.setImageBitmap(imageBitmap);
+        } else if (requestCode == REQUEST_IMAGE_GALLERY) {
+            Uri selectedImage = data.getData();
+            isNewPhotoUploaded = true;
+            userPhotoImageView.setImageURI(selectedImage);
         }
     }
 
-    public void updateUserProfile(){
+    private void updateUserProfile() {
 
         String userEmail = userEmailEditText.getText().toString();
         String userPassword = userPasswordEditText.getText().toString();
-        String pathToPhoto = saveToInternalStorage(((BitmapDrawable)userPhotoImageView.getDrawable()).getBitmap());
-
+        String pathToPhoto = saveToInternalStorage(((BitmapDrawable) userPhotoImageView.getDrawable()).getBitmap());
 
         currentUser.email = userEmail;
-        currentUser.password = userPassword;
         currentUser.pathToPhoto = pathToPhoto;
 
-        MainActivity.appDatabase.userDao().updateUser(currentUser);
-        Toast.makeText(homeActivity.getApplicationContext(),"Changes are saved", Toast.LENGTH_SHORT).show();
+        mListener.updateUser();
+        Toast.makeText(homeActivity.getApplicationContext(), "Changes are saved", Toast.LENGTH_SHORT).show();
     }
 
-    private String saveToInternalStorage(Bitmap bitmapImage){
+    private String saveToInternalStorage(Bitmap bitmapImage) {
         ContextWrapper cw = new ContextWrapper(homeActivity.getApplicationContext());
 
         File directory = cw.getDir("profilePhotosDirectory", Context.MODE_PRIVATE);
 
-        File myPath = new File(directory,"profile.jpg");
+        File myPath = new File(directory, "profile.jpg");
 
         FileOutputStream fos = null;
         try {
@@ -176,17 +229,5 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
         return directory.getAbsolutePath();
     }
 
-    private Bitmap loadImageFromStorage(String path)
-    {
-        try {
-            File f=new File(path, "profile.jpg");
-            return BitmapFactory.decodeStream(new FileInputStream(f));
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-            return null;
-        }
 
-    }
 }

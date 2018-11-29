@@ -2,6 +2,7 @@ package com.example.androidlabs;
 
 import androidx.lifecycle.ViewModelProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -35,14 +36,9 @@ public class IndexFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment IndexFragment.
-     */
+
+
+
     // TODO: Rename and change types and number of parameters
     public static IndexFragment newInstance(String param1, String param2) {
         IndexFragment fragment = new IndexFragment();
