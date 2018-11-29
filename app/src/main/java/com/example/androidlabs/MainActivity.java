@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.androidlabs.services.UserService;
 import com.example.androidlabs.models.User;
@@ -29,8 +30,6 @@ public class MainActivity extends AppCompatActivity implements
         editProfileFragment.OnFragmentInteractionListener, createProfileFragment.OnFragmentInteractionListener,
         signInFragment.OnFragmentInteractionListener
 {
-
-
 
     private DrawerLayout mDrawerLayout;
     private NavController navController;
@@ -71,10 +70,17 @@ public class MainActivity extends AppCompatActivity implements
                         navController.navigate(R.id.indexFragment);
                         return true;
                     case R.id.first_menu_item:
-                        navController.navigate(R.id.profileFragment);
+                        if (currentUser == null)
+                        {
+                            Toast.makeText(MainActivity.this, R.string.redirect_to_sign_in_message, Toast.LENGTH_SHORT).show();
+                            navigateToSignInDestination();
+                            return true;
+                        }
+                        else navController.navigate(R.id.profileFragment);
                         return true;
                     case R.id.logout_menu_item:
                         UserService.logout();
+                        currentUser = null;
                         navigateToSignInDestination();
                         return true;
                     case R.id.create_account_item:

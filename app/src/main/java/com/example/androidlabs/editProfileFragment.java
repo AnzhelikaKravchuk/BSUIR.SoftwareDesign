@@ -1,11 +1,10 @@
-package com.example.yura.androidlabs;
+package com.example.androidlabs;
 
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,7 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.yura.androidlabs.MainActivity.currentUser;
+import static com.example.androidlabs.MainActivity.currentUser;
 
 
 public class editProfileFragment extends Fragment implements View.OnClickListener {
@@ -171,7 +170,7 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
 
     private void dispatchTakePhotoFromGalleryIntent() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         this.startActivityForResult(galleryIntent, REQUEST_IMAGE_GALLERY);
     }
 

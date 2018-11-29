@@ -44,18 +44,11 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/moveToCreateUserFragmentButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/move_to_create_user_fragment_button"
-            android:textAllCaps="false" />
-
-        <Button
             android:id="@+id/signInUserButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginStart="47dp"
+
             android:text="@string/signin_button_title"
             android:textAllCaps="false" />
     </LinearLayout>

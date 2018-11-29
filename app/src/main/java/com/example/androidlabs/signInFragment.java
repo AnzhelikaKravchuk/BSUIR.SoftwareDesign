@@ -37,8 +37,8 @@ public class signInFragment extends Fragment implements View.OnClickListener {
         userEmailEditText = view.findViewById(R.id.emailSignInTextInput);
         userPasswordEditText = view.findViewById(R.id.passwordSignInTextInput);
 
-        Button createUserButton = view.findViewById(R.id.moveToCreateUserFragmentButton);
-        createUserButton.setOnClickListener(this);
+        //Button createUserButton = view.findViewById(R.id.moveToCreateUserFragmentButton);
+        //createUserButton.setOnClickListener(this);
         Button signInUserButton = view.findViewById(R.id.signInUserButton);
         signInUserButton.setOnClickListener(this);
 
@@ -65,9 +65,6 @@ public class signInFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.moveToCreateUserFragmentButton:
-                mListener.moveToCreateUserDestination();
-                break;
             case R.id.signInUserButton:
                 mListener.signInUser(
                     userEmailEditText.getText().toString(),

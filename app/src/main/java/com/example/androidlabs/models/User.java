@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+/** Represents entity for managing User in firebase with additional properties*/
 @IgnoreExtraProperties
 public class User {
     public String  uid;

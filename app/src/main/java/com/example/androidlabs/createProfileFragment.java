@@ -1,4 +1,4 @@
-package com.example.yura.androidlabs;
+package com.example.androidlabs;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -137,7 +137,7 @@ public class createProfileFragment extends Fragment implements View.OnClickListe
 
     private void dispatchTakePhotoFromGalleryIntent() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         this.startActivityForResult(galleryIntent, REQUEST_IMAGE_GALLERY);
     }
 
@@ -160,8 +160,8 @@ public class createProfileFragment extends Fragment implements View.OnClickListe
     public interface OnFragmentInteractionListener {
 
         void createUser(
-            String email, String password,
-            String name, String surname,
-            String phoneNUmber, Bitmap photo);
+                String email, String password,
+                String name, String surname,
+                String phoneNUmber, Bitmap photo);
     }
 }
