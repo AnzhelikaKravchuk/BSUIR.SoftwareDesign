@@ -1,21 +1,20 @@
 package com.example.androidlabs;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import com.example.androidlabs.services.UserService;
-import com.example.androidlabs.models.User;
-import com.example.androidlabs.roomdDb.AppDatabase;
+import com.example.androidlabs.businessLogic.AuthentificationService;
+import com.example.androidlabs.businessLogic.UserManagementServicece;
+import com.example.androidlabs.dataAccess.entities.User;
+import com.example.androidlabs.dataAccess.roomdDb.AppDatabase;
 import com.google.android.material.navigation.NavigationView;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -34,8 +33,10 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout mDrawerLayout;
     private NavController navController;
 
-    private static AppDatabase appRoomDatabase ;
     public static User currentUser;
+
+    private UserManagementServicece userManager;
+    private AuthentificationService authService;
 
     public void updateCurrentUser(User newUser) {
         currentUser = newUser;
@@ -43,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -54,11 +54,27 @@ public class MainActivity extends AppCompatActivity implements
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        appRoomDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "app_database").allowMainThreadQueries().build();;
+        AppDatabase appAdditionalInfoDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "app_database").allowMainThreadQueries().build();
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         navController = Navigation.findNavController(this, R.id.my_nav_host_fragment);
 
+        authService = new AuthentificationService(this,navController, appAdditionalInfoDatabase);
+        userManager = new UserManagementServicece(this, navController, appAdditionalInfoDatabase);
+
+
+        setupNavigationView();
+
+        if (authService.isUserSignedIn()){
+            currentUser = authService.getCurrentUserAsUser();
+        }
+        else{
+            currentUser = null;
+            navigateToSignInDestination(R.id.indexFragment);
+        }
+    }
+
+    public void setupNavigationView(){
         NavigationView navigationView = findViewById(R.id.nav_view);
         NavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -70,36 +86,22 @@ public class MainActivity extends AppCompatActivity implements
                         navController.navigate(R.id.indexFragment);
                         return true;
                     case R.id.first_menu_item:
-                        if (currentUser == null)
-                        {
-                            Toast.makeText(MainActivity.this, R.string.redirect_to_sign_in_message, Toast.LENGTH_SHORT).show();
-                            navigateToSignInDestination();
-                            return true;
-                        }
-                        else navController.navigate(R.id.profileFragment);
+                        navController.navigate(R.id.profileFragment);
                         return true;
-                    case R.id.logout_menu_item:
-                        UserService.logout();
-                        currentUser = null;
-                        navigateToSignInDestination();
-                        return true;
-                    case R.id.create_account_item:
+                     case R.id.create_account_item:
                         navController.navigate(R.id.createProfileFragment);
                         return true;
+                    case R.id.logout_menu_item: {
+                        authService.logout();
+                        currentUser = null;
+                        navigateToSignInDestination(R.id.indexFragment);
+                        return true;
+                    }
                 }
                 return false;
             }
         };
         navigationView.setNavigationItemSelectedListener(onNavigationItemSelectedListener);
-
-        if (UserService.isUserSignedIn()) {
-            currentUser = UserService.getCurrentUser(appRoomDatabase);
-        }
-        else{
-            navigateToSignInDestination();
-        }
-
-
     }
 
     @Override
@@ -117,10 +119,6 @@ public class MainActivity extends AppCompatActivity implements
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
-
-            //case R.id.about_menu_item:
-             //   navController.navigate(R.id.aboutFragment);
-              //  return true;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -143,9 +141,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void updateUser() {
-
-
+    public void updateUser(String uid, String email, String password, String name, String surname,
+                           String phoneNumber, Bitmap photo) {
+        userManager.updateUser(uid, email, password, name, surname, phoneNumber, photo);
+        MainActivity.currentUser = authService.getCurrentUserAsUser();
     }
 
     @Override
@@ -153,18 +152,33 @@ public class MainActivity extends AppCompatActivity implements
         navController.navigate(R.id.editProfileFragment);
     }
 
-    //@Override
-    public void navigateToSignInDestination() {
+    @Override
+    public void navigateToSignInDestination(int nextDestinationId) {
+        userManager.nextDestinationId = nextDestinationId;
         navController.navigate(R.id.signInFragment);
     }
 
     @Override
-    public void createUser(String email, String password, String name, String surname, String phoneNUmber, Bitmap photo) {
-        UserService.createUser(
+    public void createUser(
+            String email, String password,
+            String name, String surname, String phoneNUmber, Bitmap photo,
+            int nextDestinationId) {
+        userManager.nextDestinationId = nextDestinationId;
+        userManager.createUser(
                 email, password,
                 name, surname,
-                phoneNUmber, photo,
-                this, navController, R.id.indexFragment, appRoomDatabase);
+                phoneNUmber, photo);
+    }
+
+    @Override
+    public AlertDialog.Builder showGetPhotoDialog() {
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+        pictureDialog.setTitle("Select Action");
+        String[] pictureDialogItems = {
+                "Select photo from gallery",
+                "Capture photo from camera"
+        };
+        return pictureDialog;
     }
 
     @Override
@@ -174,10 +188,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void signInUser(String email, String password){
-        UserService.signInUser(
-                email, password,
-                this, navController, R.id.indexFragment, appRoomDatabase
-        );
+        userManager.nextDestinationId = R.id.indexFragment;
+        authService.signInUser(email, password);
     }
 
     @Override

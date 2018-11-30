@@ -1,4 +1,4 @@
-package com.example.androidlabs.models;
+package com.example.androidlabs.dataAccess.entities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

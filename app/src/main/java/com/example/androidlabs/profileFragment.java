@@ -25,24 +25,27 @@ public class profileFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        if (MainActivity.currentUser == null){
+            mListener.navigateToSignInDestination(R.id.profileFragment);
+        } else {
 
-        TextView nameTextView = view.findViewById(R.id.nameTextView);
-        TextView surnameTextView = view.findViewById(R.id.surnameTextView);
-        TextView phoneNumberTextView = view.findViewById(R.id.phoneNumberTextView);
-        TextView emailTextView = view.findViewById(R.id.emailTextView);
+            TextView nameTextView = view.findViewById(R.id.nameTextView);
+            TextView surnameTextView = view.findViewById(R.id.surnameTextView);
+            TextView phoneNumberTextView = view.findViewById(R.id.phoneNumberTextView);
+            TextView emailTextView = view.findViewById(R.id.emailTextView);
 
-        ImageView photoImageView = view.findViewById(R.id.photoImageView);
+            ImageView photoImageView = view.findViewById(R.id.photoImageView);
 
-        nameTextView.setText(MainActivity.currentUser.name);
-        surnameTextView.setText(MainActivity.currentUser.surname);
-        phoneNumberTextView.setText(MainActivity.currentUser.phoneNumber);
-        emailTextView.setText(MainActivity.currentUser.email);
-        photoImageView.setImageBitmap(MainActivity.currentUser.loadImageFromStorage());
+            nameTextView.setText(MainActivity.currentUser.name);
+            surnameTextView.setText(MainActivity.currentUser.surname);
+            phoneNumberTextView.setText(MainActivity.currentUser.phoneNumber);
+            emailTextView.setText(MainActivity.currentUser.email);
+            photoImageView.setImageBitmap(MainActivity.currentUser.loadImageFromStorage());
 
-        Button navigateToEditProfileButton = view.findViewById(R.id.navigateToEditProfileButton);
-        navigateToEditProfileButton.setOnClickListener(this);
-
-         return view;
+            Button navigateToEditProfileButton = view.findViewById(R.id.navigateToEditProfileButton);
+            navigateToEditProfileButton.setOnClickListener(this);
+        }
+        return view;
     }
 
     @Override
@@ -74,5 +77,6 @@ public class profileFragment extends Fragment implements View.OnClickListener{
 
     public interface OnFragmentInteractionListener {
         void navigateToEditProfile();
+        void navigateToSignInDestination(int nextDestinationId);
     }
 }

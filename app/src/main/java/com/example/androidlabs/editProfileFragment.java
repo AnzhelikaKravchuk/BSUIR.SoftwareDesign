@@ -1,7 +1,6 @@
 package com.example.androidlabs;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +12,7 @@ import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,24 +23,23 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import static android.app.Activity.RESULT_OK;
 import static com.example.androidlabs.MainActivity.currentUser;
 
 
 public class editProfileFragment extends Fragment implements View.OnClickListener {
 
+    private EditText userNameEditText;
     private EditText userEmailEditText;
     private EditText userPasswordEditText;
+    private EditText userSurnameEditText;
+    private EditText userPhoneNumberEditText;
     private ImageView userPhotoImageView;
 
     private MainActivity homeActivity;
     private boolean isNewPhotoUploaded = false;
+
+    private View view;
 
     private OnFragmentInteractionListener mListener;
 
@@ -48,30 +47,50 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
         // Required empty public constructor
     }
 
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
-        homeActivity = (MainActivity) getActivity();
+        if (MainActivity.currentUser == null) {
+            mListener.navigateToSignInDestination(R.id.editProfileFragment);
+        } else {
 
-        userEmailEditText = view.findViewById(R.id.emailEditTextView);
-        userPasswordEditText = view.findViewById(R.id.passwordEditTextView);
-        userPhotoImageView = view.findViewById(R.id.userPhotoEditImageView);
+            homeActivity = (MainActivity) getActivity();
 
-        userEmailEditText.setText(currentUser.email);
-        userPhotoImageView.setImageBitmap(MainActivity.currentUser.loadImageFromStorage());
+            userEmailEditText = view.findViewById(R.id.emailEditTextView);
+            userEmailEditText.setText(MainActivity.currentUser.email);
+            userPasswordEditText = view.findViewById(R.id.passwordEditTextView);
+            userNameEditText = view.findViewById(R.id.nameEditTextInput);
+            userNameEditText.setText(MainActivity.currentUser.name);
+            userSurnameEditText = view.findViewById(R.id.surnameEditTextInput);
+            userSurnameEditText.setText(MainActivity.currentUser.surname);
+            userPhoneNumberEditText = view.findViewById(R.id.phoneNumberEditTextInput);
+            userPhoneNumberEditText.setText(MainActivity.currentUser.phoneNumber);
+            userPhotoImageView = view.findViewById(R.id.userPhotoEditImageView);
 
-        Button updateButton = view.findViewById(R.id.updateProfileButton);
-        updateButton.setOnClickListener(this);
-        userPhotoImageView.setOnClickListener(this);
+            userEmailEditText.setText(currentUser.email);
+            userPhotoImageView.setImageBitmap(MainActivity.currentUser.loadImageFromStorage());
+
+            Button updateButton = view.findViewById(R.id.updateProfileButton);
+            updateButton.setOnClickListener(this);
+            userPhotoImageView.setOnClickListener(this);
+        }
         return view;
     }
 
     @Override
     public void onStop() {
-        if (isNewPhotoUploaded || !currentUser.email.equals(userEmailEditText.getText().toString()))
-        {
+        if (MainActivity.currentUser != null && (
+                isNewPhotoUploaded
+                        || !currentUser.email.equals(userEmailEditText.getText().toString())
+                        || !currentUser.name.equals(userNameEditText.getText().toString())
+                        || !currentUser.surname.equals(userSurnameEditText.getText().toString())
+                        || !currentUser.phoneNumber.equals(userPhoneNumberEditText.getText().toString())
+                        || !userPasswordEditText.getText().toString().equals("")
+        )
+                ) {
             AlertDialog.Builder builder = new AlertDialog.Builder(homeActivity);
             builder.setTitle("Save changes?")
                     .setCancelable(false)
@@ -113,7 +132,7 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        // mListener = null;
     }
 
     @Override
@@ -155,9 +174,16 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
 
     public interface OnFragmentInteractionListener {
         void popFromStackExcessDestination();
+
         void navigateAfterSavingChanges(int nextDestinationId);
+
         int getExcessDestinationId();
-        void updateUser();
+
+        void updateUser(String uid, String email, String password,
+                        String name, String surname, String phoneNumber, Bitmap photo
+        );
+
+        void navigateToSignInDestination(int nextDestinationId);
     }
 
     private static final int REQUEST_IMAGE_PHOTO = 1;
@@ -170,7 +196,7 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
 
     private void dispatchTakePhotoFromGalleryIntent() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         this.startActivityForResult(galleryIntent, REQUEST_IMAGE_GALLERY);
     }
 
@@ -194,39 +220,48 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
 
     private void updateUserProfile() {
 
-        String userEmail = userEmailEditText.getText().toString();
-        String userPassword = userPasswordEditText.getText().toString();
-        String pathToPhoto = saveToInternalStorage(((BitmapDrawable) userPhotoImageView.getDrawable()).getBitmap());
+        if (!validate())
+            return;
+        isNewPhotoUploaded = false;
 
-        currentUser.email = userEmail;
-        currentUser.pathToPhoto = pathToPhoto;
+        Bitmap photo = ((BitmapDrawable) userPhotoImageView.getDrawable()).getBitmap();
 
-        mListener.updateUser();
+        String uid = MainActivity.currentUser.uid;
+        String email = userEmailEditText.getText().toString();
+        String password = userPasswordEditText.getText().toString();
+        String name = userNameEditText.getText().toString();
+        String surname = userSurnameEditText.getText().toString();
+        String phoneNumber = userPhoneNumberEditText.getText().toString();
+
+        mListener.updateUser(uid, email, password, name, surname, phoneNumber, photo);
+
+        MainActivity.currentUser.email = email;
+        MainActivity.currentUser.name = name;
+        MainActivity.currentUser.surname = surname;
+        MainActivity.currentUser.phoneNumber = phoneNumber;
+
+        userPasswordEditText.setText("");
+
         Toast.makeText(homeActivity.getApplicationContext(), "Changes are saved", Toast.LENGTH_SHORT).show();
     }
 
-    private String saveToInternalStorage(Bitmap bitmapImage) {
-        ContextWrapper cw = new ContextWrapper(homeActivity.getApplicationContext());
+    private Boolean validate(){
+        EditText email = view.findViewById(R.id.emailEditTextView);
+        EditText password = view.findViewById(R.id.passwordEditTextView);
+        EditText phone = view.findViewById(R.id.phoneNumberEditTextInput);
 
-        File directory = cw.getDir("profilePhotosDirectory", Context.MODE_PRIVATE);
-
-        File myPath = new File(directory, "profile.jpg");
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(myPath);
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if(TextUtils.isEmpty(email.getText())) {
+            email.setError("Enter email!");
+            password.requestFocus();
+            return false;
         }
-        return directory.getAbsolutePath();
-    }
+        else if(TextUtils.isEmpty(password.getText())|| password.getText().length() < 6){
+            password.setError("Length should be great then 6");
+            password.requestFocus();
+            return false;
+        }
 
+        return true;
+    }
 
 }

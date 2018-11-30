@@ -1,4 +1,4 @@
-package com.example.androidlabs.roomdDb.entities;
+package com.example.androidlabs.dataAccess.roomdDb.entities;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -12,6 +12,10 @@ public class UserAdditionalInfo {
     public String uid;
 
     public String name;
+
+    public String email;
+
+    public String password;
 
     public String surname;
 

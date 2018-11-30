@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -22,10 +21,11 @@ import android.widget.ImageView;
 
 import static android.app.Activity.RESULT_OK;
 
+
 public class createProfileFragment extends Fragment implements View.OnClickListener{
 
     private OnFragmentInteractionListener mListener;
-    private MainActivity mainActivity;
+//    private MainActivity mainActivity;
 
     private EditText  userNameInputText;
     private EditText  userSurnameInputText;
@@ -48,8 +48,6 @@ public class createProfileFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_profile, container, false);
-
-        mainActivity = (MainActivity) getActivity();
 
         userNameInputText = view.findViewById(R.id.nameCreateTextInput);
         userSurnameInputText = view.findViewById(R.id.surnameCreateTextInput);
@@ -93,22 +91,24 @@ public class createProfileFragment extends Fragment implements View.OnClickListe
                         userNameInputText.getText().toString(),
                         userSurnameInputText.getText().toString(),
                         userPhoneNumberInputText.getText().toString(),
-                        ((BitmapDrawable) userPhotoCreateImageView.getDrawable()).getBitmap()
+                        ((BitmapDrawable) userPhotoCreateImageView.getDrawable()).getBitmap(),
+                        R.id.indexFragment
                 );
                 break;
             case R.id.userPhotoCreateImageView:
-                showPictureDialog();
+                showGetPhotoDialog();
                 break;
         }
     }
 
-    private void showPictureDialog() {
+    private void showGetPhotoDialog() {
 
-        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(mainActivity);
+        AlertDialog.Builder pictureDialog = mListener.showGetPhotoDialog();
         pictureDialog.setTitle("Select Action");
         String[] pictureDialogItems = {
                 "Select photo from gallery",
-                "Capture photo from camera"};
+                "Capture photo from camera"
+        };
         pictureDialog.setItems(pictureDialogItems,
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -137,7 +137,7 @@ public class createProfileFragment extends Fragment implements View.OnClickListe
 
     private void dispatchTakePhotoFromGalleryIntent() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         this.startActivityForResult(galleryIntent, REQUEST_IMAGE_GALLERY);
     }
 
@@ -162,6 +162,9 @@ public class createProfileFragment extends Fragment implements View.OnClickListe
         void createUser(
                 String email, String password,
                 String name, String surname,
-                String phoneNUmber, Bitmap photo);
+                String phoneNUmber, Bitmap photo,
+                int nextDestinationId
+        );
+        AlertDialog.Builder showGetPhotoDialog();
     }
 }
