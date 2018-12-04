@@ -1,6 +1,7 @@
 package com.example.androidlabs;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
@@ -11,10 +12,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.androidlabs.businessLogic.UserManagementServicece;
+import com.example.androidlabs.dataAccess.entities.User;
+
 
 public class profileFragment extends Fragment implements View.OnClickListener{
 
     private OnFragmentInteractionListener mListener;
+
+    private User currentUser;
 
     public profileFragment() {
         // Required empty public constructor
@@ -25,7 +31,9 @@ public class profileFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        if (MainActivity.currentUser == null){
+        currentUser = UserManagementServicece.getInstance().getCurrentUser();
+
+        if (currentUser == null){
             mListener.navigateToSignInDestination(R.id.profileFragment);
         } else {
 
@@ -36,11 +44,13 @@ public class profileFragment extends Fragment implements View.OnClickListener{
 
             ImageView photoImageView = view.findViewById(R.id.photoImageView);
 
-            nameTextView.setText(MainActivity.currentUser.name);
-            surnameTextView.setText(MainActivity.currentUser.surname);
-            phoneNumberTextView.setText(MainActivity.currentUser.phoneNumber);
-            emailTextView.setText(MainActivity.currentUser.email);
-            photoImageView.setImageBitmap(MainActivity.currentUser.loadImageFromStorage());
+            nameTextView.setText(currentUser.name);
+            surnameTextView.setText(currentUser.surname);
+            phoneNumberTextView.setText(currentUser.phoneNumber);
+            emailTextView.setText(currentUser.email);
+            photoImageView.setImageBitmap(
+                    mListener.uploadProfilePhoto(currentUser.pathToPhoto)
+            );
 
             Button navigateToEditProfileButton = view.findViewById(R.id.navigateToEditProfileButton);
             navigateToEditProfileButton.setOnClickListener(this);
@@ -78,5 +88,6 @@ public class profileFragment extends Fragment implements View.OnClickListener{
     public interface OnFragmentInteractionListener {
         void navigateToEditProfile();
         void navigateToSignInDestination(int nextDestinationId);
+        Bitmap uploadProfilePhoto(String pathToPhoto);
     }
 }

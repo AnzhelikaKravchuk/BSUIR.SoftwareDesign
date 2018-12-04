@@ -24,7 +24,6 @@
                 android:layout_marginStart="40dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:foreground="@mipmap/ic_camera"
                 android:src="@mipmap/default_profile_photo_round"
                 app:civ_border_color="#FF000000"
                 app:civ_border_width="2dp" />

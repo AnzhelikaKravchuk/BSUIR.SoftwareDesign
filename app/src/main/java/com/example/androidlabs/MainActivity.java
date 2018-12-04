@@ -1,15 +1,24 @@
 package com.example.androidlabs;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.androidlabs.businessLogic.AuthentificationService;
 import com.example.androidlabs.businessLogic.UserManagementServicece;
 import com.example.androidlabs.dataAccess.entities.User;
 import com.example.androidlabs.dataAccess.roomdDb.AppDatabase;
 import com.google.android.material.navigation.NavigationView;
+
+import java.io.File;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -36,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements
     public static User currentUser;
 
     private UserManagementServicece userManager;
-    private AuthentificationService authService;
 
     public void updateCurrentUser(User newUser) {
         currentUser = newUser;
@@ -51,26 +59,47 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
         ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(actionbar).setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        AppDatabase appAdditionalInfoDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "app_database").allowMainThreadQueries().build();
+        AppDatabase appAdditionalInfoDatabase = Room.databaseBuilder(
+                getApplicationContext(),
+                AppDatabase.class, "app_database"
+        ).allowMainThreadQueries().build();
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         navController = Navigation.findNavController(this, R.id.my_nav_host_fragment);
 
-        authService = new AuthentificationService(this,navController, appAdditionalInfoDatabase);
-        userManager = new UserManagementServicece(this, navController, appAdditionalInfoDatabase);
-
+        userManager = new UserManagementServicece(appAdditionalInfoDatabase);
 
         setupNavigationView();
 
-        if (authService.isUserSignedIn()){
-            currentUser = authService.getCurrentUserAsUser();
+        if (userManager.isUserSignedIn()){
+            currentUser = userManager.getCurrentUser();
         }
         else{
             currentUser = null;
-            navigateToSignInDestination(R.id.indexFragment);
+            navigateToSignInDestination(R.id.signInFragment);
+        }
+        setupImage();
+    }
+
+    public void setupImage() {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ImageView imageView = navigationView.findViewById(R.id.userImage);
+        if (userManager.getCurrentUser() != null)
+        {
+            String path = userManager.getCurrentUser().pathToPhoto;
+            File imgFile = new  File(path);
+
+            if(imgFile.exists() && imageView != null){
+                imageView.setImageBitmap(ImageHelper.loadImageFromStorage(path));
+            }
+        }
+
+        else {
+            if(imageView != null)
+                imageView.setImageResource(R.mipmap.default_profile_photo_round);
         }
     }
 
@@ -79,21 +108,32 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
                 menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
                     case R.id.index_menu_item:
+                        setupImage();
                         navController.navigate(R.id.indexFragment);
                         return true;
-                    case R.id.first_menu_item:
-                        navController.navigate(R.id.profileFragment);
+                    case R.id.About:
+                        if (currentUser != null) {
+                            setupImage();
+                            navController.navigate(R.id.About);
+                        }
+                        else navController.navigate(R.id.signInFragment);
                         return true;
-                     case R.id.create_account_item:
-                        navController.navigate(R.id.createProfileFragment);
+                    case R.id.first_menu_item:
+                        if (currentUser != null) {
+                            setupImage();
+                            navController.navigate(R.id.profileFragment);
+                        }
+                        else navController.navigate(R.id.signInFragment);
                         return true;
                     case R.id.logout_menu_item: {
-                        authService.logout();
+                        userManager.logout();
                         currentUser = null;
+                        setupImage();
                         navigateToSignInDestination(R.id.indexFragment);
                         return true;
                     }
@@ -113,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        setupImage();
         switch (item.getItemId()) {
 
             case android.R.id.home:
@@ -125,26 +165,44 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    public void popFromStackExcessDestination(){
-        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-    }
-
-    @Override
-    public void navigateAfterSavingChanges(int nextDestinationId){
-        navController.navigate(nextDestinationId);
-    }
-
-    @Override
-    public int getExcessDestinationId(){
-        return Objects.requireNonNull(navController.getCurrentDestination()).getId();
-    }
 
     @Override
     public void updateUser(String uid, String email, String password, String name, String surname,
-                           String phoneNumber, Bitmap photo) {
-        userManager.updateUser(uid, email, password, name, surname, phoneNumber, photo);
-        MainActivity.currentUser = authService.getCurrentUserAsUser();
+                           String phoneNumber, String pathToPhoto, String currentPassword) {
+        userManager.setOnUpdateResultListener(new UserManagementServicece.OnUpdateResultListener() {
+            @Override
+            public void OnUpdateResultSuccess() {
+
+                Toast.makeText(getApplicationContext(), "Updated successfully",
+                        Toast.LENGTH_SHORT).show();
+                navController.navigate(R.id.profileFragment);
+            }
+
+            @Override
+            public void onUpdateFailed(String failedTextException) {
+
+                Toast.makeText(
+                        getApplicationContext(),
+                        failedTextException,
+                        Toast.LENGTH_SHORT).show();
+            }
+
+        });
+        userManager.setOnConfirmResultListener(new UserManagementServicece.OnConfirmResultListener() {
+            @Override
+            public void onConfirmFailed(String exceptionText) {
+                Toast.makeText(
+                        getApplicationContext(),
+                        exceptionText,
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+        });
+
+
+        userManager.updateUser(uid, email, password, name, surname, phoneNumber, pathToPhoto, currentPassword);
+        hideKeyboard();
+        setupImage();
     }
 
     @Override
@@ -154,31 +212,52 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void navigateToSignInDestination(int nextDestinationId) {
-        userManager.nextDestinationId = nextDestinationId;
         navController.navigate(R.id.signInFragment);
     }
 
     @Override
     public void createUser(
             String email, String password,
-            String name, String surname, String phoneNUmber, Bitmap photo,
-            int nextDestinationId) {
-        userManager.nextDestinationId = nextDestinationId;
+            String name, String surname, String phoneNUmber, String pathToPhoto
+    ) {
+        userManager.setOnCreationResultListener(new UserManagementServicece.OnCreationResultListener() {
+            @Override
+            public void onCreationResultSuccess() {
+                //tearDownProgressBar(R.id.signInProgressBar);
+                Toast.makeText(
+                        getApplicationContext(),
+                        "You are welcome.",
+                        Toast.LENGTH_SHORT
+                ).show();
+                navController.navigate(R.id.indexFragment);
+            }
+
+            @Override
+            public void onCreationResultFailed(String exceptionText) {
+
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Creation failed." + exceptionText,
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+        });
         userManager.createUser(
                 email, password,
                 name, surname,
-                phoneNUmber, photo);
+                phoneNUmber, pathToPhoto);
+        hideKeyboard();
+        setupImage();
     }
 
     @Override
-    public AlertDialog.Builder showGetPhotoDialog() {
-        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        pictureDialog.setTitle("Select Action");
-        String[] pictureDialogItems = {
-                "Select photo from gallery",
-                "Capture photo from camera"
-        };
-        return pictureDialog;
+    public String saveProfilePhoto(Bitmap photo) {
+        return ImageHelper.saveToInternalStorage(photo, getApplicationContext());
+    }
+
+    @Override
+    public Bitmap uploadProfilePhoto(String pathToPhoto){
+        return ImageHelper.loadImageFromStorage(pathToPhoto);
     }
 
     @Override
@@ -188,12 +267,59 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void signInUser(String email, String password){
-        userManager.nextDestinationId = R.id.indexFragment;
-        authService.signInUser(email, password);
+        userManager.setOnAuthenticateResultListener(new UserManagementServicece.OnAuthenticateResultListener(){
+            @Override
+            public void onAuthenticateSuccess() {
+                tearDownProgressBar(R.id.signInProgressBar);
+                Toast.makeText(
+                        getApplicationContext(),
+                        "You are authenticated.",
+                        Toast.LENGTH_SHORT
+                ).show();
+
+                updateCurrentUser(userManager.getCurrentUser());
+
+                navController.navigate(R.id.indexFragment);
+            }
+
+            @Override
+            public void onAuthenticateFailed() {
+                tearDownProgressBar(R.id.signInProgressBar);
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+        });
+        setUpProgressBar(R.id.signInProgressBar);
+        userManager.signInUser(email, password);
+        hideKeyboard();
+        setupImage();
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
+    private void setUpProgressBar(int progressBarId){
+        ProgressBar progressBar = findViewById(progressBarId);
+        progressBar.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
 
+    private void tearDownProgressBar(int progressBarId){
+        ProgressBar progressBar = findViewById(progressBarId);
+        progressBar.setVisibility(View.GONE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(MainActivity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = this.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(this);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
+

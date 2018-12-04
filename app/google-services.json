@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "316083994098",
-    "firebase_url": "https://androidlabs-d3e26.firebaseio.com",
-    "project_id": "androidlabs-d3e26",
-    "storage_bucket": "androidlabs-d3e26.appspot.com"
+    "project_number": "693142839795",
+    "firebase_url": "https://androidlabs-45aa0.firebaseio.com",
+    "project_id": "androidlabs-45aa0",
+    "storage_bucket": "androidlabs-45aa0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:316083994098:android:4c9aad7344fe28c7",
+        "mobilesdk_app_id": "1:693142839795:android:f2bd06fb26cf9fd4",
         "android_client_info": {
           "package_name": "com.example.androidlabs"
         }
       },
       "oauth_client": [
         {
-          "client_id": "316083994098-fg23d30jodn42bb4s3p0n9kf3729v57b.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.androidlabs",
-            "certificate_hash": "fb9c918b6b1b7e117405e381c6c6ebc148c920df"
-          }
-        },
-        {
-          "client_id": "316083994098-f97gc52vut8shn9s8l2j6te94hiv7vma.apps.googleusercontent.com",
+          "client_id": "693142839795-1f41ph1d9furl2u5o1vo3d6qujsgmmbt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAlcBKGMv_QF1f5xsh30XxbZZ9kdnIPTdQ"
+          "current_key": "AIzaSyBncrI6n1SRhYhiGg3a1n_R-Qv35Pd088c"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "316083994098-f97gc52vut8shn9s8l2j6te94hiv7vma.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

@@ -50,5 +50,10 @@
         android:name="com.example.androidlabs.createProfileFragment"
         android:label="fragment_create_profile"
         tools:layout="@layout/fragment_create_profile" />
+    <fragment
+        android:id="@+id/About"
+        android:name="com.example.androidlabs.aboutFragment"
+        android:label="@string/about_menu_item_string"
+        tools:layout="@layout/fragment_about" />
 
 </navigation>
