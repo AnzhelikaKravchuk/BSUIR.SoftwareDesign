@@ -89,6 +89,7 @@ tools:context=".IndexFragment">
                     android:textColor="@color/colorPrimaryDark" />
             </LinearLayout>
 
+
             <Button
                 android:id="@+id/navigateToEditProfileButton"
                 android:layout_width="wrap_content"

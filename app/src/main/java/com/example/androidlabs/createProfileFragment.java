@@ -28,10 +28,11 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 
 
+import java.io.IOException;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
-public class createProfileFragment extends Fragment implements View.OnClickListener {
+public class createProfileFragment extends androidx.fragment.app.Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
 //    private MainActivity mainActivity;
@@ -218,9 +219,7 @@ public class createProfileFragment extends Fragment implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.createProfileButton:
-                String pathToPhoto = mListener.saveProfilePhoto(
-                        ((BitmapDrawable) userPhotoCreateImageView.getDrawable()).getBitmap()
-                );
+
                 if (userNameInputText.getText().toString().length() == 0) {
                     userNameInputText.setError("required");
                 }
@@ -255,6 +254,14 @@ public class createProfileFragment extends Fragment implements View.OnClickListe
                 if (userPasswordInputText.getError() != null){
                     userPasswordInputText.requestFocus();
                     return;
+                }
+                String pathToPhoto = null;
+                try {
+                    pathToPhoto = mListener.saveProfilePhoto(
+                            ((BitmapDrawable) userPhotoCreateImageView.getDrawable()).getBitmap(), userEmailInputText.getText().toString()
+                    );
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
                 mListener.createUser(
                         userEmailInputText.getText().toString(),
@@ -335,6 +342,6 @@ public class createProfileFragment extends Fragment implements View.OnClickListe
                 String phoneNUmber, String pathToPhoto
         );
 
-        String saveProfilePhoto(Bitmap photo);
+        String saveProfilePhoto(Bitmap photo, String email) throws IOException;
     }
 }

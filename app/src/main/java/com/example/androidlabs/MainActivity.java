@@ -1,7 +1,6 @@
 package com.example.androidlabs;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,45 +9,38 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androidlabs.businessLogic.AuthentificationService;
 import com.example.androidlabs.businessLogic.UserManagementServicece;
 import com.example.androidlabs.dataAccess.entities.User;
 import com.example.androidlabs.dataAccess.roomdDb.AppDatabase;
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.room.Room;
 
 public class MainActivity extends AppCompatActivity implements
         IndexFragment.OnFragmentInteractionListener, profileFragment.OnFragmentInteractionListener,
-        editProfileFragment.OnFragmentInteractionListener, createProfileFragment.OnFragmentInteractionListener,
-        signInFragment.OnFragmentInteractionListener
+        editProfileFragment.OnFragmentInteractionListener
 {
 
     private DrawerLayout mDrawerLayout;
     private NavController navController;
-
+    private boolean navDataSet;
     public static User currentUser;
 
     private UserManagementServicece userManager;
-
-    public void updateCurrentUser(User newUser) {
-        currentUser = newUser;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,26 +73,6 @@ public class MainActivity extends AppCompatActivity implements
             currentUser = null;
             navigateToSignInDestination(R.id.signInFragment);
         }
-        setupImage();
-    }
-
-    public void setupImage() {
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        ImageView imageView = navigationView.findViewById(R.id.userImage);
-        if (userManager.getCurrentUser() != null)
-        {
-            String path = userManager.getCurrentUser().pathToPhoto;
-            File imgFile = new  File(path);
-
-            if(imgFile.exists() && imageView != null){
-                imageView.setImageBitmap(ImageHelper.loadImageFromStorage(path));
-            }
-        }
-
-        else {
-            if(imageView != null)
-                imageView.setImageResource(R.mipmap.default_profile_photo_round);
-        }
     }
 
     public void setupNavigationView(){
@@ -113,35 +85,80 @@ public class MainActivity extends AppCompatActivity implements
                 mDrawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
                     case R.id.index_menu_item:
-                        setupImage();
                         navController.navigate(R.id.indexFragment);
                         return true;
                     case R.id.About:
-                        if (currentUser != null) {
-                            setupImage();
-                            navController.navigate(R.id.About);
-                        }
-                        else navController.navigate(R.id.signInFragment);
+                        navController.navigate(R.id.About);
                         return true;
                     case R.id.first_menu_item:
-                        if (currentUser != null) {
-                            setupImage();
-                            navController.navigate(R.id.profileFragment);
-                        }
-                        else navController.navigate(R.id.signInFragment);
+                        navController.navigate(R.id.profileFragment);
                         return true;
                     case R.id.logout_menu_item: {
                         userManager.logout();
                         currentUser = null;
-                        setupImage();
-                        navigateToSignInDestination(R.id.indexFragment);
+                        Intent mainActivityIntent = new Intent(MainActivity.this, AuthActivity.class);
+                        startActivity(mainActivityIntent);
+                        finish();
                         return true;
                     }
                 }
                 return false;
             }
         };
+
+
+
+        View navHeader = navigationView.getHeaderView(0);
+        ImageView navHeaderUserPhotoImageView = navHeader.findViewById(R.id.userImage);
+        navHeaderUserPhotoImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (userManager.getCurrentUser() != null
+                        && navController.getCurrentDestination().getId() != R.id.profileFragment) {
+                    navController.navigate(R.id.profileFragment);
+                }
+                mDrawerLayout.closeDrawers();
+
+            }
+        });
+
         navigationView.setNavigationItemSelectedListener(onNavigationItemSelectedListener);
+
+        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+            }
+
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // Respond when the drawer is closed
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                ImageView navHeaderUserPhoto = findViewById(R.id.userImage);
+
+                if (userManager.getCurrentUser() != null) {
+                    TextView email = findViewById(R.id.emailTextView);
+                    TextView fullName = findViewById(R.id.fullNameTextView);
+
+                    email.setText(userManager.getCurrentUser().email);
+                    fullName.setText(userManager.getCurrentUser().name + " " + userManager.getCurrentUser().surname);
+                    navHeaderUserPhoto.setImageBitmap(
+                            uploadProfilePhoto(userManager.getCurrentUser().pathToPhoto)
+                    );
+
+                } else {
+                    navHeaderUserPhoto.setImageResource(R.mipmap.default_profile_photo_round);
+                }
+
+            }
+        });
     }
 
     @Override
@@ -153,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        setupImage();
+        //setupImage();
         switch (item.getItemId()) {
 
             case android.R.id.home:
@@ -176,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements
                 Toast.makeText(getApplicationContext(), "Updated successfully",
                         Toast.LENGTH_SHORT).show();
                 navController.navigate(R.id.profileFragment);
+                tearDownProgressBar(R.id.editProgressBar);
             }
 
             @Override
@@ -185,9 +203,12 @@ public class MainActivity extends AppCompatActivity implements
                         getApplicationContext(),
                         failedTextException,
                         Toast.LENGTH_SHORT).show();
+                tearDownProgressBar(R.id.editProgressBar);
             }
 
+
         });
+
         userManager.setOnConfirmResultListener(new UserManagementServicece.OnConfirmResultListener() {
             @Override
             public void onConfirmFailed(String exceptionText) {
@@ -199,10 +220,14 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-
+        setUpProgressBar(R.id.editProgressBar);
         userManager.updateUser(uid, email, password, name, surname, phoneNumber, pathToPhoto, currentPassword);
         hideKeyboard();
-        setupImage();
+    }
+
+    @Override
+    public String saveProfilePhoto(Bitmap photo, String email) throws IOException {
+        return ImageHelper.saveToInternalStorage(photo, email,getApplicationContext());
     }
 
     @Override
@@ -215,88 +240,12 @@ public class MainActivity extends AppCompatActivity implements
         navController.navigate(R.id.signInFragment);
     }
 
-    @Override
-    public void createUser(
-            String email, String password,
-            String name, String surname, String phoneNUmber, String pathToPhoto
-    ) {
-        userManager.setOnCreationResultListener(new UserManagementServicece.OnCreationResultListener() {
-            @Override
-            public void onCreationResultSuccess() {
-                //tearDownProgressBar(R.id.signInProgressBar);
-                Toast.makeText(
-                        getApplicationContext(),
-                        "You are welcome.",
-                        Toast.LENGTH_SHORT
-                ).show();
-                navController.navigate(R.id.indexFragment);
-            }
-
-            @Override
-            public void onCreationResultFailed(String exceptionText) {
-
-                Toast.makeText(
-                        getApplicationContext(),
-                        "Creation failed." + exceptionText,
-                        Toast.LENGTH_SHORT
-                ).show();
-            }
-        });
-        userManager.createUser(
-                email, password,
-                name, surname,
-                phoneNUmber, pathToPhoto);
-        hideKeyboard();
-        setupImage();
-    }
-
-    @Override
-    public String saveProfilePhoto(Bitmap photo) {
-        return ImageHelper.saveToInternalStorage(photo, getApplicationContext());
-    }
 
     @Override
     public Bitmap uploadProfilePhoto(String pathToPhoto){
         return ImageHelper.loadImageFromStorage(pathToPhoto);
     }
 
-    @Override
-    public void moveToCreateUserDestination() {
-        navController.navigate(R.id.createProfileFragment);
-    }
-
-    @Override
-    public void signInUser(String email, String password){
-        userManager.setOnAuthenticateResultListener(new UserManagementServicece.OnAuthenticateResultListener(){
-            @Override
-            public void onAuthenticateSuccess() {
-                tearDownProgressBar(R.id.signInProgressBar);
-                Toast.makeText(
-                        getApplicationContext(),
-                        "You are authenticated.",
-                        Toast.LENGTH_SHORT
-                ).show();
-
-                updateCurrentUser(userManager.getCurrentUser());
-
-                navController.navigate(R.id.indexFragment);
-            }
-
-            @Override
-            public void onAuthenticateFailed() {
-                tearDownProgressBar(R.id.signInProgressBar);
-                Toast.makeText(
-                        getApplicationContext(),
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT
-                ).show();
-            }
-        });
-        setUpProgressBar(R.id.signInProgressBar);
-        userManager.signInUser(email, password);
-        hideKeyboard();
-        setupImage();
-    }
 
     private void setUpProgressBar(int progressBarId){
         ProgressBar progressBar = findViewById(progressBarId);

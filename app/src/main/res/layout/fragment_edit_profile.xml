@@ -135,6 +135,18 @@
                 android:layout_margin="10dp"/>
 
         </LinearLayout>
+            <ProgressBar
+                android:layout_alignParentBottom="true"
+                android:indeterminate="true"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/editProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
         </RelativeLayout>
+
+
     </androidx.cardview.widget.CardView>
 </ScrollView>

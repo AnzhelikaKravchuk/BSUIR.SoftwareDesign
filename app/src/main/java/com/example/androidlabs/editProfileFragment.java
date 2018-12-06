@@ -30,6 +30,7 @@ import com.example.androidlabs.ImageHelper;
 import com.example.androidlabs.businessLogic.UserManagementServicece;
 import com.example.androidlabs.dataAccess.entities.User;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
@@ -250,7 +251,11 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.updateProfileButton:
-                updateUserProfile();
+                try {
+                    updateUserProfile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.userPhotoEditImageView:
                 showPictureDialog();
@@ -295,7 +300,7 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
                         String currentPassword
         );
 
-        String saveProfilePhoto(Bitmap photo);
+        String saveProfilePhoto(Bitmap photo, String email) throws IOException;
 
         Bitmap uploadProfilePhoto(String pathToPhoto);
 
@@ -334,7 +339,7 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    private void updateUserProfile() {
+    private void updateUserProfile() throws IOException {
 
         if (userNameEditText.getText().toString().length() == 0) {
             userNameEditText.setError("required");
@@ -379,7 +384,7 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
         final String name = userNameEditText.getText().toString();
         final String surname = userSurnameEditText.getText().toString();
         final String phoneNumber = userPhoneNumberEditText.getText().toString();
-        final String pathToPhoto = mListener.saveProfilePhoto(photo);
+        final String pathToPhoto = mListener.saveProfilePhoto(photo, email);
 
         if (!currentUser.email.equals(email) || !password.isEmpty()){
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
@@ -387,13 +392,7 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
             alertDialog.setMessage("Current password");
 
             final EditText input = new EditText(getContext());
-            /*
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT
-            );
-            input.setLayoutParams(lp);
-            */
+
             alertDialog.setView(input);
             alertDialog.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
