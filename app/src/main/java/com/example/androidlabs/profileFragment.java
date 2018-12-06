@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.androidlabs.businessLogic.UserManagementServicece;
+import com.example.androidlabs.businessLogic.UserManagementService;
 import com.example.androidlabs.dataAccess.entities.User;
 
 
@@ -31,7 +31,7 @@ public class profileFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        currentUser = UserManagementServicece.getInstance().getCurrentUser();
+        currentUser = UserManagementService.getInstance().getCurrentUser();
 
         if (currentUser == null){
             mListener.navigateToSignInDestination(R.id.profileFragment);

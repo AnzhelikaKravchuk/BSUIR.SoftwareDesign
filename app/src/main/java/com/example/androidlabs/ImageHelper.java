@@ -22,7 +22,7 @@ public class ImageHelper {
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(myPath);
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 50, fos);
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 20, fos);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

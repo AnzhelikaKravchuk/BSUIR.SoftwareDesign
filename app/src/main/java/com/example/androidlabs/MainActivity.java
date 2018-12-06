@@ -1,4 +1,5 @@
 package com.example.androidlabs;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androidlabs.businessLogic.UserManagementServicece;
+import com.example.androidlabs.businessLogic.UserManagementService;
 import com.example.androidlabs.dataAccess.entities.User;
 import com.example.androidlabs.dataAccess.roomdDb.AppDatabase;
 import com.google.android.material.navigation.NavigationView;
@@ -22,12 +23,15 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.room.Room;
 
 public class MainActivity extends AppCompatActivity implements
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements
     private boolean navDataSet;
     public static User currentUser;
 
-    private UserManagementServicece userManager;
+    private UserManagementService userManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements
         mDrawerLayout = findViewById(R.id.drawer_layout);
         navController = Navigation.findNavController(this, R.id.my_nav_host_fragment);
 
-        userManager = new UserManagementServicece(appAdditionalInfoDatabase);
+        userManager = new UserManagementService(appAdditionalInfoDatabase);
 
         setupNavigationView();
 
@@ -186,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void updateUser(String uid, String email, String password, String name, String surname,
                            String phoneNumber, String pathToPhoto, String currentPassword) {
-        userManager.setOnUpdateResultListener(new UserManagementServicece.OnUpdateResultListener() {
+        userManager.setOnUpdateResultListener(new UserManagementService.OnUpdateResultListener() {
             @Override
             public void OnUpdateResultSuccess() {
 
@@ -209,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements
 
         });
 
-        userManager.setOnConfirmResultListener(new UserManagementServicece.OnConfirmResultListener() {
+        userManager.setOnConfirmResultListener(new UserManagementService.OnConfirmResultListener() {
             @Override
             public void onConfirmFailed(String exceptionText) {
                 Toast.makeText(
@@ -270,5 +274,44 @@ public class MainActivity extends AppCompatActivity implements
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
+
+    @Override
+    public void onBackPressed() {
+
+        final NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
+        Fragment current = navHostFragment.getChildFragmentManager().getFragments().get(0);
+        if (navController.getCurrentDestination().getId() == R.id.editProfileFragment
+                && ((editProfileFragment) current).isUnsavedChanges()){
+
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.setMessage("You have unstaged changes");
+            dialogBuilder.setCancelable(false);
+            dialogBuilder.setPositiveButton(
+                    "Stay",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    }
+            );
+            dialogBuilder.setNegativeButton(
+                    "Discard",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            navController.navigate(R.id.profileFragment);
+                        }
+                    }
+            );
+
+            dialogBuilder.show();
+        } else {
+
+            super.onBackPressed();
+        }
+
+    }
+
 }
 

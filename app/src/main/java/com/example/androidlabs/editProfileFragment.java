@@ -26,15 +26,14 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 
 import androidx.appcompat.app.AlertDialog;
-import com.example.androidlabs.ImageHelper;
-import com.example.androidlabs.businessLogic.UserManagementServicece;
+
+import com.example.androidlabs.businessLogic.UserManagementService;
 import com.example.androidlabs.dataAccess.entities.User;
 
 import java.io.IOException;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.androidlabs.MainActivity.currentUser;
 
 public class editProfileFragment extends Fragment implements View.OnClickListener {
 
@@ -61,7 +60,7 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
-        currentUser = UserManagementServicece.getInstance().getCurrentUser();
+        currentUser = UserManagementService.getInstance().getCurrentUser();
 
         if (currentUser == null) {
             mListener.navigateToSignInDestination(R.id.editProfileFragment);
@@ -150,6 +149,22 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
             }
         });
     }
+
+    public boolean isUnsavedChanges(){
+        User currentUser = UserManagementService.getInstance().getCurrentUser();
+        if (!currentUser.email.equals(userEmailEditText.getText().toString()))
+            return true;
+        if (!userPasswordEditText.getText().toString().isEmpty())
+            return true;
+        if (!currentUser.name.equals(userNameEditText.getText().toString()))
+            return true;
+        if (!currentUser.surname.equals(userSurnameEditText.getText().toString()))
+            return true;
+        if (!currentUser.phoneNumber.equals(userPhoneNumberEditText.getText().toString()))
+            return true;
+        return isNewPhotoUploaded;
+    }
+
 
     private void setupUserPhoneNumberEditText(EditText userPhoneNumberEditTextInitial){
         this.userPhoneNumberEditText = userPhoneNumberEditTextInitial;

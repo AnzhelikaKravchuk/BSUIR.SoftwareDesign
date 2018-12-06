@@ -2,8 +2,6 @@ package com.example.androidlabs;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.room.Room;
 
 import android.content.Intent;
@@ -16,7 +14,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.androidlabs.businessLogic.UserManagementServicece;
+import com.example.androidlabs.businessLogic.UserManagementService;
 import com.example.androidlabs.dataAccess.roomdDb.AppDatabase;
 
 import java.io.IOException;
@@ -27,7 +25,7 @@ public class AuthActivity extends AppCompatActivity implements
 
     private EditText userEmailEditText;
     private EditText userPasswordEditText;
-    private UserManagementServicece userManager;
+    private UserManagementService userManager;
     //private NavController navController;
 
     @Override
@@ -37,7 +35,7 @@ public class AuthActivity extends AppCompatActivity implements
                 AppDatabase.class, "app_database"
         ).allowMainThreadQueries().build();
 
-        userManager = new UserManagementServicece(appAdditionalInfoDatabase);
+        userManager = new UserManagementService(appAdditionalInfoDatabase);
         //navController = Navigation.findNavController(this, R.id.my_nav_host_fragment);
         if (userManager.isUserSignedIn())
         {
@@ -60,7 +58,7 @@ public class AuthActivity extends AppCompatActivity implements
             String email, String password,
             String name, String surname, String phoneNUmber, String pathToPhoto
     ) {
-        userManager.setOnCreationResultListener(new UserManagementServicece.OnCreationResultListener() {
+        userManager.setOnCreationResultListener(new UserManagementService.OnCreationResultListener() {
             @Override
             public void onCreationResultSuccess() {
                 //tearDownProgressBar(R.id.signInProgressBar);
@@ -111,7 +109,7 @@ public class AuthActivity extends AppCompatActivity implements
     @Override
     public void signInUser(String email, String password){
 
-        userManager.setOnAuthenticateResultListener(new UserManagementServicece.OnAuthenticateResultListener(){
+        userManager.setOnAuthenticateResultListener(new UserManagementService.OnAuthenticateResultListener(){
             @Override
             public void onAuthenticateSuccess() {
                 tearDownProgressBar(R.id.signInProgressBar);

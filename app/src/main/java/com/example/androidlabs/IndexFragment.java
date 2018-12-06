@@ -9,11 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.androidlabs.businessLogic.UserManagementServicece;
+import com.example.androidlabs.businessLogic.UserManagementService;
 import com.example.androidlabs.dataAccess.entities.User;
-import com.google.firebase.auth.FirebaseUser;
-
-import static com.example.androidlabs.MainActivity.currentUser;
 
 public class IndexFragment extends Fragment {
 
@@ -34,7 +31,7 @@ public class IndexFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_index, container, false);
-        User currentUser = UserManagementServicece.getInstance().getCurrentUser();
+        User currentUser = UserManagementService.getInstance().getCurrentUser();
         if(currentUser == null){
             mListener.navigateToSignInDestination(R.id.indexFragment);
         }

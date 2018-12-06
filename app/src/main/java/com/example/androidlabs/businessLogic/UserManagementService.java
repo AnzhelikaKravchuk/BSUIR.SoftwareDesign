@@ -1,12 +1,5 @@
 package com.example.androidlabs.businessLogic;
 
-import android.content.Context;
-import android.content.ContextWrapper;
-import android.graphics.Bitmap;
-import android.widget.Toast;
-
-import com.example.androidlabs.MainActivity;
-import com.example.androidlabs.R;
 import com.example.androidlabs.dataAccess.entities.User;
 import com.example.androidlabs.dataAccess.roomdDb.AppDatabase;
 import com.example.androidlabs.dataAccess.roomdDb.entities.UserAdditionalInfo;
@@ -17,21 +10,17 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import androidx.annotation.NonNull;
 
-public class UserManagementServicece {
-    private static volatile UserManagementServicece instance;
+public class UserManagementService {
+    private static volatile UserManagementService instance;
 
     private FirebaseAuth mAuth;
     private User currentUser;
     private FirebaseUser currentFirebaseUser;
     private AppDatabase appAdditionalInfoDatabase;
 
-    public UserManagementServicece(AppDatabase appAdditionalInfoDatabase) {
+    public UserManagementService(AppDatabase appAdditionalInfoDatabase) {
         this.appAdditionalInfoDatabase = appAdditionalInfoDatabase;
         mAuth = FirebaseAuth.getInstance();
         currentFirebaseUser = mAuth.getCurrentUser();
@@ -48,7 +37,7 @@ public class UserManagementServicece {
         instance = this;
     }
 
-    public static UserManagementServicece getInstance() {
+    public static UserManagementService getInstance() {
         return instance;
     }
 
