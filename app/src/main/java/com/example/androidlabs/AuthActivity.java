@@ -20,8 +20,8 @@ import com.example.androidlabs.dataAccess.roomdDb.AppDatabase;
 import java.io.IOException;
 
 public class AuthActivity extends AppCompatActivity implements
-        createProfileFragment.OnFragmentInteractionListener,
-        signInFragment.OnFragmentInteractionListener  {
+        CreateProfileFragment.OnFragmentInteractionListener,
+        SignInFragment.OnFragmentInteractionListener  {
 
     private EditText userEmailEditText;
     private EditText userPasswordEditText;
@@ -48,7 +48,7 @@ public class AuthActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_auth);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.my_nav_host_fragment, new signInFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.my_nav_host_fragment, new SignInFragment()).commit();
 
 
     }
@@ -99,10 +99,10 @@ public class AuthActivity extends AppCompatActivity implements
 
     @Override
     public void moveToCreateUserDestination() {
-        //navController.navigate(R.id.createProfileFragment);
+        //navController.navigate(R.id.CreateProfileFragment);
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        fragmentManager.beginTransaction().replace(R.id.my_nav_host_fragment, new createProfileFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.my_nav_host_fragment, new CreateProfileFragment()).commit();
 
     }
 

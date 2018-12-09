@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.androidlabs.profileFragment"
+        android:name="com.example.androidlabs.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile">
         <action
@@ -31,14 +31,14 @@
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="com.example.androidlabs.editProfileFragment"
+        android:name="com.example.androidlabs.EditProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile">
         <deepLink app:uri="sdapp://com.enchantme.akalicom.example.yura.androidlabs/profile/edit" />
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.example.androidlabs.signInFragment"
+        android:name="com.example.androidlabs.SignInFragment"
         android:label="fragment_sign_in"
         tools:layout="@layout/fragment_sign_in" >
         <action
@@ -47,12 +47,12 @@
     </fragment>
     <fragment
         android:id="@+id/createProfileFragment"
-        android:name="com.example.androidlabs.createProfileFragment"
+        android:name="com.example.androidlabs.CreateProfileFragment"
         android:label="fragment_create_profile"
         tools:layout="@layout/fragment_create_profile" />
     <fragment
         android:id="@+id/About"
-        android:name="com.example.androidlabs.aboutFragment"
+        android:name="com.example.androidlabs.AboutFragment"
         android:label="@string/about_menu_item_string"
         tools:layout="@layout/fragment_about" />
 

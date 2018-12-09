@@ -16,13 +16,13 @@ import com.example.androidlabs.businessLogic.UserManagementService;
 import com.example.androidlabs.dataAccess.entities.User;
 
 
-public class profileFragment extends Fragment implements View.OnClickListener{
+public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     private OnFragmentInteractionListener mListener;
 
     private User currentUser;
 
-    public profileFragment() {
+    public ProfileFragment() {
         // Required empty public constructor
     }
 

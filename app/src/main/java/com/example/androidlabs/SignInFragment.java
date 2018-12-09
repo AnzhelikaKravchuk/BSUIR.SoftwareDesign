@@ -19,14 +19,14 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 
 
-public class signInFragment extends Fragment implements View.OnClickListener {
+public class SignInFragment extends Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
 
     private EditText userEmailEditText;
     private EditText userPasswordEditText;
 
-    public signInFragment() {
+    public SignInFragment() {
         // Required empty public constructor
     }
 

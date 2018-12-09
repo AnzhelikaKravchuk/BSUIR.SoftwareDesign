@@ -35,8 +35,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.room.Room;
 
 public class MainActivity extends AppCompatActivity implements
-        IndexFragment.OnFragmentInteractionListener, profileFragment.OnFragmentInteractionListener,
-        editProfileFragment.OnFragmentInteractionListener
+        IndexFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
+        EditProfileFragment.OnFragmentInteractionListener
 {
 
     private DrawerLayout mDrawerLayout;
@@ -213,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements
 
         });
 
+        setUpProgressBar(R.id.editProgressBar);
         userManager.setOnConfirmResultListener(new UserManagementService.OnConfirmResultListener() {
             @Override
             public void onConfirmFailed(String exceptionText) {
@@ -224,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        setUpProgressBar(R.id.editProgressBar);
+
         userManager.updateUser(uid, email, password, name, surname, phoneNumber, pathToPhoto, currentPassword);
         hideKeyboard();
     }
@@ -282,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements
         final NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
         Fragment current = navHostFragment.getChildFragmentManager().getFragments().get(0);
         if (navController.getCurrentDestination().getId() == R.id.editProfileFragment
-                && ((editProfileFragment) current).isUnsavedChanges()){
+                && ((EditProfileFragment) current).isUnsavedChanges()){
 
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             dialogBuilder.setMessage("You have unstaged changes");

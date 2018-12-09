@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
-public class createProfileFragment extends androidx.fragment.app.Fragment implements View.OnClickListener {
+public class CreateProfileFragment extends androidx.fragment.app.Fragment implements View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
 //    private MainActivity mainActivity;
@@ -44,7 +44,7 @@ public class createProfileFragment extends androidx.fragment.app.Fragment implem
     private EditText userPasswordInputText;
     private ImageView userPhotoCreateImageView;
 
-    public createProfileFragment() {
+    public CreateProfileFragment() {
         // Required empty public constructor
     }
 

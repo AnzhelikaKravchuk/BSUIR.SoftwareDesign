@@ -21,14 +21,14 @@ import android.widget.Toast;
 
 import java.util.Objects;
 
-public class aboutFragment extends Fragment {
+public class AboutFragment extends Fragment {
 
     private View currentView;
     private MainActivity homeActivity;
 
     private static final int PERMISSION_READ_PHONE_STATE = 0;
 
-    public aboutFragment() {
+    public AboutFragment() {
         // Required empty public constructor
     }
 

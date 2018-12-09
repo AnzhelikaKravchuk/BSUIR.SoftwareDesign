@@ -35,7 +35,7 @@ import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
-public class editProfileFragment extends Fragment implements View.OnClickListener {
+public class EditProfileFragment extends Fragment implements View.OnClickListener {
 
     private User currentUser;
 
@@ -50,7 +50,7 @@ public class editProfileFragment extends Fragment implements View.OnClickListene
 
     private OnFragmentInteractionListener mListener;
 
-    public editProfileFragment() {
+    public EditProfileFragment() {
         // Required empty public constructor
     }
 

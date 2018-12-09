@@ -36,17 +36,4 @@ public class User {
         this.pathToPhoto = pathToPhoto;
     }
 
-    public Bitmap loadImageFromStorage()
-    {
-        try {
-            File f=new File(this.pathToPhoto, "profile.jpg");
-            return BitmapFactory.decodeStream(new FileInputStream(f));
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
 }
