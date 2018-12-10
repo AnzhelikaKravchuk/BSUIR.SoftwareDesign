@@ -55,7 +55,8 @@ public class UserManagementService {
                 userAdditionalInfo.surname,
                 currentFirebaseUser.getEmail(),
                 userAdditionalInfo.phoneNumber,
-                userAdditionalInfo.pathToPhoto
+                userAdditionalInfo.pathToPhoto,
+                userAdditionalInfo.rssNewsUrl
         );
     }
 
@@ -223,5 +224,13 @@ public class UserManagementService {
         userAdditionalInfo.pathToPhoto = pathToPhoto;
         userAdditionalInfo.uid = uid;
         appAdditionalInfoDatabase.userDAdditionalInfo().updateUserAdditionalInfo(userAdditionalInfo);
+    }
+
+    public void updateUserRssUrl(String rssNewsUrl){
+        UserAdditionalInfo userAdditionalInfo = appAdditionalInfoDatabase.userDAdditionalInfo()
+                .getUserAdditionalInfo(currentUser.uid);
+        userAdditionalInfo.rssNewsUrl = rssNewsUrl;
+        appAdditionalInfoDatabase.userDAdditionalInfo().updateUserAdditionalInfo(userAdditionalInfo);
+        currentUser.rssNewsUrl = rssNewsUrl;
     }
 }

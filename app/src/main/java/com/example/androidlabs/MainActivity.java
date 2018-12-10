@@ -240,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements
         navController.navigate(R.id.editProfileFragment);
     }
 
+
     @Override
     public void navigateToSignInDestination(int nextDestinationId) {
         navController.navigate(R.id.signInFragment);

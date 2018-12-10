@@ -19,4 +19,6 @@ public class UserAdditionalInfo {
     public String phoneNumber;
 
     public String pathToPhoto;
+
+    public String rssNewsUrl = null;
 }

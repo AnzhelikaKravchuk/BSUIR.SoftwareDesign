@@ -17,6 +17,8 @@ public class User {
     public String email;
     public String pathToPhoto;
     public String phoneNumber;
+    public String rssNewsUrl;
+
 
     public User(){
 
@@ -26,7 +28,8 @@ public class User {
             String uid,
             String name, String surname,
             String email,
-            String phoneNumber, String pathToPhoto
+            String phoneNumber, String pathToPhoto,
+            String rssNewsUrl
     ) {
         this.uid = uid;
         this.name = name;
@@ -34,6 +37,7 @@ public class User {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.pathToPhoto = pathToPhoto;
+        this.rssNewsUrl = rssNewsUrl;
     }
 
 }

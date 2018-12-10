@@ -13,11 +13,36 @@
         <action
             android:id="@+id/action_indexFragment_to_firstFragment"
             app:destination="@id/profileFragment" />
-        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.yura.androidlabs/" />
+        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.androidlabs/" />
 
         <action
             android:id="@+id/action_indexFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
+        <action
+            android:id="@+id/action_indexFragment_to_rssReaderFragment"
+            app:destination="@id/rssReaderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/rssReaderFragment"
+        android:name="com.example.androidlabs.NewsLoaderFragment"
+        android:label="fragment_rss_reader"
+        tools:layout="@layout/fragment_rss_reader" >
+        <action
+            android:id="@+id/action_rssReaderFragment_to_newsDetails"
+            app:destination="@id/newsDetails">
+            <argument
+                android:name="newsUrl"
+                app:argType="string" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/newsDetails"
+        android:name="com.example.androidlabs.NewsDetails"
+        android:label="fragment_news_details"
+        tools:layout="@layout/fragment_news_details" >
+        <argument
+            android:name="newsUrl"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -27,14 +52,14 @@
         <action
             android:id="@+id/action_firstFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
-        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.yura.androidlabs/profile" />
+        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.androidlabs/profile" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.example.androidlabs.EditProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile">
-        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.yura.androidlabs/profile/edit" />
+        <deepLink app:uri="sdapp://com.enchantme.akalicom.example.androidlabs/profile/edit" />
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
