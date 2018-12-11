@@ -2,6 +2,8 @@ package com.example.androidlabs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +48,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.AdapterViewHol
         final News feedItem = feedItems.get(position);
         ((TextView)holder.itemView.findViewById(R.id.cardTitleTextView)).setText(feedItem.title);
         ((TextView)holder.itemView.findViewById(R.id.cardPubDateTextView)).setText(feedItem.pubDate);
-        ((TextView)holder.itemView.findViewById(R.id.cardTextTextView)).setText(feedItem.description);
+
+
+        ((TextView)holder.itemView.findViewById(R.id.cardTextTextView)).setText(Html.fromHtml(feedItem.description));
+
+
         Glide.with(context).load(feedItem.thumbnailUrl).into((ImageView)holder.itemView.findViewById(R.id.cardImageTextView));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

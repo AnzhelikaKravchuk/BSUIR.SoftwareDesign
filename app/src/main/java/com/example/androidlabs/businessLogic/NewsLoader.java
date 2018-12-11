@@ -72,6 +72,11 @@ public class NewsLoader extends AsyncTask<Void, Void, Void> {
                         {
                             item.link = currenet.getTextContent();
                         }
+                        else if(currenet.getNodeName().equalsIgnoreCase("media:content"))
+                        {
+                            String url=currenet.getAttributes().item(0).getTextContent();
+                            item.thumbnailUrl = url;
+                        }
                         else if(currenet.getNodeName().equalsIgnoreCase("media:thumbnail"))
                         {
                             String url=currenet.getAttributes().item(0).getTextContent();

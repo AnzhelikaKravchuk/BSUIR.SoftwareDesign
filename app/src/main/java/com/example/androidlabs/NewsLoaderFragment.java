@@ -226,7 +226,7 @@ public class NewsLoaderFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         userManager.updateUserRssUrl(
-                                "https://www.cnet.com/rss/news/"
+                                "https://news.google.com/_/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx1YlY4U0FtVnVHZ0pWVXlnQVAB?hl=en-US&gl=US&ceid=US:en"
                         );
                         NewsLoader rssReader = new NewsLoader(
                                 userManager.getCurrentUser().rssNewsUrl

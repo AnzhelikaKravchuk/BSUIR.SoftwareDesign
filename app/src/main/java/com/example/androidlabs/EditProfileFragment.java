@@ -80,6 +80,9 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             userPhotoImageView = view.findViewById(R.id.userPhotoEditImageView);
             userPhotoImageView.setImageBitmap(mListener.uploadProfilePhoto(currentUser.pathToPhoto));
 
+            userLinkEditText = view.findViewById(R.id.linkEditTextView);
+            userLinkEditText.setText(currentUser.rssNewsUrl);
+
             Button updateButton = view.findViewById(R.id.updateProfileButton);
             updateButton.setOnClickListener(this);
             userPhotoImageView.setOnClickListener(this);

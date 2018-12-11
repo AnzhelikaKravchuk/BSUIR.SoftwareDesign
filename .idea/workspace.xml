@@ -15,24 +15,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0465c02e-4828-4222-accb-ecd9135a23cc" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/EditProfileFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/EditProfileFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/MainActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsDetail.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsLoaderFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsLoaderFragment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/CacheManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/News.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/News.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/NewsLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/NewsLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/UserManagementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/UserManagementService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/dataAccess/roomdDb/dao/NewsDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/dataAccess/roomdDb/dao/NewsDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/dataAccess/roomdDb/entities/NewsItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/dataAccess/roomdDb/entities/NewsItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_news_detail.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_news_detail.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_edit_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_edit_profile.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/rss_element.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/rss_element.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/drawer_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/drawer_view.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -61,8 +48,8 @@
       <file leaf-file-name="NewsLoaderFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsLoaderFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1054">
-              <caret line="69" column="40" selection-start-line="69" selection-start-column="40" selection-end-line="69" selection-end-column="40" />
+            <state relative-caret-position="952">
+              <caret line="226" column="68" selection-start-line="226" selection-start-column="68" selection-end-line="226" selection-end-column="68" />
               <folding>
                 <element signature="e#5067#5068#0" expanded="true" />
                 <element signature="e#5147#5148#0" expanded="true" />
@@ -70,6 +57,21 @@
                 <element signature="e#6455#6456#0" expanded="true" />
                 <element signature="e#7328#7711#0" expanded="true" />
                 <element signature="e#7710#7711#0" expanded="true" />
+                <element signature="e#8865#9332#0" expanded="true" />
+                <element signature="e#9331#9332#0" expanded="true" />
+                <element signature="e#9978#9979#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EditProfileFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/EditProfileFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="83" column="59" selection-start-line="83" selection-start-column="59" selection-end-line="83" selection-end-column="59" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -78,8 +80,8 @@
       <file leaf-file-name="NewsLoader.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/NewsLoader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="490">
-              <caret line="38" column="41" selection-start-line="38" selection-start-column="38" selection-end-line="38" selection-end-column="41" />
+            <state relative-caret-position="170">
+              <caret line="62" column="25" lean-forward="true" selection-start-line="62" selection-start-column="25" selection-end-line="62" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -87,36 +89,46 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="News.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/News.java">
+      <file leaf-file-name="SignInFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/SignInFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" selection-start-line="12" selection-end-line="12" />
+            <state relative-caret-position="85">
+              <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CacheManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/CacheManager.java">
+      <file leaf-file-name="nav_header.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/nav_header.xml">
+          <provider selected="true" editor-type-id="android-designer2">
+            <state />
+          </provider>
+          <provider editor-type-id="text-editor">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rss_element.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/rss_element.xml">
+          <provider editor-type-id="android-designer2">
+            <state />
+          </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-122">
-              <caret line="14" column="16" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="289">
+              <caret line="26" column="30" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/MainActivity.java">
+      <file leaf-file-name="NewsAdapter.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4063">
-              <caret line="266" column="25" selection-start-line="266" selection-start-column="25" selection-end-line="266" selection-end-column="25" />
+            <state relative-caret-position="425">
+              <caret line="58" column="88" selection-start-line="58" selection-start-column="88" selection-end-line="58" selection-end-column="88" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4875#5234#0" expanded="true" />
-                <element signature="e#5233#5234#0" expanded="true" />
+                <element signature="e#1807#2228#0" expanded="true" />
+                <element signature="e#2227#2228#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -131,39 +143,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NewsAdapter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
-              <caret line="66" column="5" selection-start-line="66" selection-start-column="5" selection-end-line="66" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
+      <file leaf-file-name="fragment_rss_reader.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_rss_reader.xml">
+          <provider selected="true" editor-type-id="android-designer2">
+            <state />
+          </provider>
+          <provider editor-type-id="text-editor">
+            <state />
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NewsDetails.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="NewsDetails.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsDetails.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
+            <state relative-caret-position="-20">
               <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1065#1230#0" expanded="true" />
                 <element signature="e#1229#1230#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EditProfileFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/EditProfileFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="422">
-              <caret line="428" column="5" selection-start-line="428" selection-start-column="5" selection-end-line="428" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -4123,7 +4121,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/CacheManager.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/dataAccess/roomdDb/entities/UserAdditionalInfo.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/dataAccess/entities/User.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/NewsLoader.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/RssReaderFragmentDirections.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/dataAccess/roomdDb/dao/NewsDao.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/dataAccess/roomdDb/AppDatabase.java" />
@@ -4132,14 +4129,15 @@
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_news_detail.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/drawer_view.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsLoaderFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/rss_element.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_edit_profile.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/UserManagementService.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_edit_profile.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/EditProfileFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsLoaderFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/NewsLoader.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsAdapter.java" />
       </list>
     </option>
   </component>
@@ -4546,15 +4544,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/NewsLoader.java</url>
-          <line>99</line>
-          <properties />
-          <option name="timeStamp" value="80" />
-        </line-breakpoint>
-      </breakpoints>
-      <option name="time" value="81" />
+      <option name="time" value="83" />
     </breakpoint-manager>
   </component>
   <component name="debuggerHistoryManager">
@@ -4679,14 +4669,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_rss_reader.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-51" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsLoaderFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="908">
@@ -4765,14 +4747,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/nav_header.xml">
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_auth.xml">
       <provider editor-type-id="android-designer2">
         <state />
@@ -4797,13 +4771,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/SignInFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -4862,34 +4829,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/rss_url_prompt.xml">
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider editor-type-id="text-editor">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/rss_element.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="50" column="38" selection-start-line="50" selection-start-column="38" selection-end-line="50" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_edit_profile.xml">
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="134" column="53" selection-start-line="134" selection-start-column="37" selection-end-line="134" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4063">
@@ -4898,16 +4837,6 @@
             <element signature="imports" expanded="true" />
             <element signature="e#4875#5234#0" expanded="true" />
             <element signature="e#5233#5234#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/EditProfileFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="428" column="5" selection-start-line="428" selection-start-column="5" selection-end-line="428" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -4929,14 +4858,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/NewsLoader.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsDetail.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="490">
-          <caret line="38" column="41" selection-start-line="38" selection-start-column="38" selection-end-line="38" selection-end-column="41" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="68">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_edit_profile.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="994">
+          <caret line="139" column="46" selection-start-line="139" selection-start-column="46" selection-end-line="139" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/rss_url_prompt.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="47" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_rss_reader.xml">
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/UserManagementService.java">
@@ -4946,27 +4900,67 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsAdapter.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/SignInFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="66" column="5" selection-start-line="66" selection-start-column="5" selection-end-line="66" selection-end-column="5" />
+        <state relative-caret-position="85">
+          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/nav_header.xml">
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider editor-type-id="text-editor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/rss_element.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="26" column="30" selection-start-line="26" selection-start-column="30" selection-end-line="26" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/EditProfileFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="83" column="59" selection-start-line="83" selection-start-column="59" selection-end-line="83" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsDetail.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/businessLogic/NewsLoader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        <state relative-caret-position="170">
+          <caret line="62" column="25" lean-forward="true" selection-start-line="62" selection-start-column="25" selection-end-line="62" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsDetails.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-20">
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1065#1230#0" expanded="true" />
+            <element signature="e#1229#1230#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsLoaderFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1054">
-          <caret line="69" column="40" selection-start-line="69" selection-start-column="40" selection-end-line="69" selection-end-column="40" />
+        <state relative-caret-position="952">
+          <caret line="226" column="68" selection-start-line="226" selection-start-column="68" selection-end-line="226" selection-end-column="68" />
           <folding>
             <element signature="e#5067#5068#0" expanded="true" />
             <element signature="e#5147#5148#0" expanded="true" />
@@ -4974,18 +4968,21 @@
             <element signature="e#6455#6456#0" expanded="true" />
             <element signature="e#7328#7711#0" expanded="true" />
             <element signature="e#7710#7711#0" expanded="true" />
+            <element signature="e#8865#9332#0" expanded="true" />
+            <element signature="e#9331#9332#0" expanded="true" />
+            <element signature="e#9978#9979#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsDetails.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/androidlabs/NewsAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+        <state relative-caret-position="425">
+          <caret line="58" column="88" selection-start-line="58" selection-start-column="88" selection-end-line="58" selection-end-column="88" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1065#1230#0" expanded="true" />
-            <element signature="e#1229#1230#0" expanded="true" />
+            <element signature="e#1807#2228#0" expanded="true" />
+            <element signature="e#2227#2228#0" expanded="true" />
           </folding>
         </state>
       </provider>
