@@ -170,15 +170,15 @@ public class UserManagementService {
     public void updateUser(
             final String uid, final String email, String password,
             final String name, final String surname, final String phoneNumber,
-            final String pathToPhoto, String currentPassword
+            final String pathToPhoto, String currentPassword, String link
     ) {
         if (!currentUser.email.equals(email) || !password.isEmpty()) {
             updateUserWithCredentials(
-                    email, password, currentPassword, uid, name, surname, phoneNumber, pathToPhoto
+                    email, password, currentPassword, uid, name, surname, phoneNumber, pathToPhoto, link
             );
         }
         else {
-            updateUserAdditionalInfo(uid, name, surname, phoneNumber, pathToPhoto);
+            updateUserAdditionalInfo(uid, name, surname, phoneNumber, pathToPhoto, link);
             currentUser = initCurrentUser();
             updateResultListener.OnUpdateResultSuccess();
         }
@@ -188,7 +188,7 @@ public class UserManagementService {
     private void updateUserWithCredentials(
             final String email, final String password, final String currentPassword,
             final String uid, final String name, final String surname, final String phoneNumber,
-            final String pathToPhoto
+            final String pathToPhoto, final String link
     ) {
         currentFirebaseUser.reauthenticate(
                 EmailAuthProvider.getCredential(currentUser.email, currentPassword)
@@ -202,7 +202,7 @@ public class UserManagementService {
                     if (!password.isEmpty()) {
                         currentFirebaseUser.updatePassword(password);
                     }
-                    updateUserAdditionalInfo(uid, name, surname, phoneNumber, pathToPhoto);
+                    updateUserAdditionalInfo(uid, name, surname, phoneNumber, pathToPhoto, link);
                     currentUser = initCurrentUser();
                     currentUser.email = email;
                     updateResultListener.OnUpdateResultSuccess();
@@ -216,13 +216,14 @@ public class UserManagementService {
     }
 
     private void updateUserAdditionalInfo(String uid, String name, String surname, String phoneNumber,
-                                          String pathToPhoto) {
+                                          String pathToPhoto, String link) {
         UserAdditionalInfo userAdditionalInfo = new UserAdditionalInfo();
         userAdditionalInfo.name = name;
         userAdditionalInfo.surname = surname;
         userAdditionalInfo.phoneNumber = phoneNumber;
         userAdditionalInfo.pathToPhoto = pathToPhoto;
         userAdditionalInfo.uid = uid;
+        userAdditionalInfo.rssNewsUrl = link;
         appAdditionalInfoDatabase.userDAdditionalInfo().updateUserAdditionalInfo(userAdditionalInfo);
     }
 

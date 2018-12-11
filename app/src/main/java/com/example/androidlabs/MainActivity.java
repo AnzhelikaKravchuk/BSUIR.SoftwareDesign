@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androidlabs.businessLogic.CacheManager;
 import com.example.androidlabs.businessLogic.UserManagementService;
 import com.example.androidlabs.dataAccess.entities.User;
 import com.example.androidlabs.dataAccess.roomdDb.AppDatabase;
@@ -36,12 +37,13 @@ import androidx.room.Room;
 
 public class MainActivity extends AppCompatActivity implements
         IndexFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener,
-        EditProfileFragment.OnFragmentInteractionListener
+        EditProfileFragment.OnFragmentInteractionListener, NewsLoaderFragment.OnFragmentInteractionListener
 {
 
     private DrawerLayout mDrawerLayout;
     private NavController navController;
     private boolean navDataSet;
+    private CacheManager cacheManager;
     public static User currentUser;
 
     private UserManagementService userManager;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements
         navController = Navigation.findNavController(this, R.id.my_nav_host_fragment);
 
         userManager = new UserManagementService(appAdditionalInfoDatabase);
+        cacheManager = new CacheManager(appAdditionalInfoDatabase);
 
         setupNavigationView();
 
@@ -81,10 +84,13 @@ public class MainActivity extends AppCompatActivity implements
 
     public void setupNavigationView(){
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         NavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
+                final NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
+                Fragment current = Objects.requireNonNull(navHostFragment).getChildFragmentManager().getFragments().get(0);
                 menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
@@ -96,6 +102,38 @@ public class MainActivity extends AppCompatActivity implements
                         return true;
                     case R.id.first_menu_item:
                         navController.navigate(R.id.profileFragment);
+                        return true;
+                    case R.id.rss_reader_menu_item:
+                        if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.editProfileFragment
+                                && ((EditProfileFragment) current).isUnsavedChanges()) {
+
+                            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                            dialogBuilder.setMessage("You have unstaged changes");
+                            dialogBuilder.setCancelable(false);
+                            dialogBuilder.setPositiveButton(
+                                    "Stay",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+
+                                        }
+                                    }
+                            );
+                            dialogBuilder.setNegativeButton(
+                                    "Discard",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            navController.navigate(R.id.rssReaderFragment);
+
+                                        }
+                                    }
+                            );
+
+                            dialogBuilder.show();
+                        } else {
+
+                            navController.navigate(R.id.rssReaderFragment);
+                        }
                         return true;
                     case R.id.logout_menu_item: {
                         userManager.logout();
@@ -189,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void updateUser(String uid, String email, String password, String name, String surname,
-                           String phoneNumber, String pathToPhoto, String currentPassword) {
+                           String phoneNumber, String pathToPhoto, String currentPassword, String link) {
         userManager.setOnUpdateResultListener(new UserManagementService.OnUpdateResultListener() {
             @Override
             public void OnUpdateResultSuccess() {
@@ -226,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements
         });
 
 
-        userManager.updateUser(uid, email, password, name, surname, phoneNumber, pathToPhoto, currentPassword);
+        userManager.updateUser(uid, email, password, name, surname, phoneNumber, pathToPhoto, currentPassword, link);
         hideKeyboard();
     }
 
@@ -240,6 +278,11 @@ public class MainActivity extends AppCompatActivity implements
         navController.navigate(R.id.editProfileFragment);
     }
 
+
+    @Override
+    public void navigateToNewsDetails(NewsLoaderFragmentDirections.ActionRssReaderFragmentToNewsDetails action) {
+        navController.navigate(action);
+    }
 
     @Override
     public void navigateToSignInDestination(int nextDestinationId) {

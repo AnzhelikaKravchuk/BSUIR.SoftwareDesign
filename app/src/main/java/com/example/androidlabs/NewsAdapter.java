@@ -53,10 +53,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.AdapterViewHol
             public void onClick(View v) {
 
                 String linkToItem = feedItem.link;
-                Intent intent = new Intent(context, NewsDetail.class);
-                intent.putExtra("Link", linkToItem);
-                context.startActivity(intent);
-                //onItemClick.navigateToDetails(action);
+                NewsLoaderFragmentDirections.ActionRssReaderFragmentToNewsDetails action =
+                        new NewsLoaderFragmentDirections.ActionRssReaderFragmentToNewsDetails(linkToItem);
+                onItemClick.navigateToDetails(action);
             }
         });
     }
@@ -76,7 +75,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.AdapterViewHol
 
     public interface OnItemClick{
         void navigateToDetails(
-                RssReaderFragmentDirections.ActionRssReaderFragmentToNewsDetails action
+                NewsLoaderFragmentDirections.ActionRssReaderFragmentToNewsDetails action
         );
     }
 

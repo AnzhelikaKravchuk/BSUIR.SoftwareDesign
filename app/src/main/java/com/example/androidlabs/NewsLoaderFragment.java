@@ -142,7 +142,7 @@ public class NewsLoaderFragment extends Fragment {
                 feedAdapter = new NewsAdapter(getContext(), feedItems);
                 feedAdapter.setOnItemCLick(new NewsAdapter.OnItemClick() {
                     @Override
-                    public void navigateToDetails(RssReaderFragmentDirections.ActionRssReaderFragmentToNewsDetails action) {
+                    public void navigateToDetails(NewsLoaderFragmentDirections.ActionRssReaderFragmentToNewsDetails action) {
                         if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
                             mListener.navigateToNewsDetails(action);
                         }
@@ -174,9 +174,9 @@ public class NewsLoaderFragment extends Fragment {
         ArrayList<News> feedCacheItems = cacheManager.getItemsFromCache();
         view.findViewById(R.id.rssReaderProgressBar).setVisibility(View.VISIBLE);
         feedAdapter = new NewsAdapter(getContext(), feedCacheItems);
-        feedAdapter.setOnItemCLick(new NewsAdapter.OnItemClick() {
+            feedAdapter.setOnItemCLick(new NewsAdapter.OnItemClick() {
             @Override
-            public void navigateToDetails(RssReaderFragmentDirections.ActionRssReaderFragmentToNewsDetails action) {
+            public void navigateToDetails(NewsLoaderFragmentDirections.ActionRssReaderFragmentToNewsDetails action) {
                 Toast.makeText(
                         getContext(),
                         "No internet connection",
@@ -259,8 +259,8 @@ public class NewsLoaderFragment extends Fragment {
     public interface OnFragmentInteractionListener {
 
         void navigateToNewsDetails(
-                RssReaderFragmentDirections.ActionRssReaderFragmentToNewsDetails actionRssReaderFragmentToNewsDetails
-        );
+                // RssReaderFragmentDirections.ActionRssReaderFragmentToNewsDetails actionRssReaderFragmentToNewsDetails
+                NewsLoaderFragmentDirections.ActionRssReaderFragmentToNewsDetails action);
 
         void navigateToSignInDestination(int nextDestinationId);
     }

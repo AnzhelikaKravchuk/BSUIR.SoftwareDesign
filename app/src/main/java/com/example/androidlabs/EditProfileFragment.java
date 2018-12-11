@@ -45,6 +45,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private EditText userSurnameEditText;
     private EditText userPhoneNumberEditText;
     private ImageView userPhotoImageView;
+    private  EditText userLinkEditText;
 
     private boolean isNewPhotoUploaded = false;
 
@@ -312,7 +313,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
         void updateUser(String uid, String email, String password,
                         String name, String surname, String phoneNumber, String pathToPhoto,
-                        String currentPassword
+                        String currentPassword, String link
         );
 
         String saveProfilePhoto(Bitmap photo, String email) throws IOException;
@@ -400,6 +401,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         final String surname = userSurnameEditText.getText().toString();
         final String phoneNumber = userPhoneNumberEditText.getText().toString();
         final String pathToPhoto = mListener.saveProfilePhoto(photo, email);
+        final String editLink = userLinkEditText.getText().toString();
 
         if (!currentUser.email.equals(email) || !password.isEmpty()){
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
@@ -415,14 +417,14 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                     mListener.updateUser(
                             uid, email, password,
                             name, surname, phoneNumber, pathToPhoto,
-                            currentPassword
+                            currentPassword, editLink
                     );
                 }
             });
             alertDialog.show();
         } else {
 
-            mListener.updateUser(uid, email, password, name, surname, phoneNumber, pathToPhoto, "");
+            mListener.updateUser(uid, email, password, name, surname, phoneNumber, pathToPhoto, "", editLink);
         }
     }
 
