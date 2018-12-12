@@ -2,6 +2,7 @@ package com.example.androidlabs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -9,11 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.example.androidlabs.businessLogic.UserManagementService;
 import com.bumptech.glide.Glide;
 
 import com.example.androidlabs.businessLogic.News;
+import com.example.androidlabs.dataAccess.entities.User;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -45,15 +49,29 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.AdapterViewHol
 
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
+        UserManagementService userManager = UserManagementService.getInstance();
+        User user = userManager.getCurrentUser();
         final News feedItem = feedItems.get(position);
         ((TextView)holder.itemView.findViewById(R.id.cardTitleTextView)).setText(feedItem.title);
         ((TextView)holder.itemView.findViewById(R.id.cardPubDateTextView)).setText(feedItem.pubDate);
 
+        if (user.rssNewsUrl.contains("news.google.com"))
+            ((TextView)holder.itemView.findViewById(R.id.cardTextTextView)).setText(Html.fromHtml(feedItem.description));
+        else
+            ((TextView)holder.itemView.findViewById(R.id.cardTextTextView)).setText(feedItem.description);
 
-        ((TextView)holder.itemView.findViewById(R.id.cardTextTextView)).setText(Html.fromHtml(feedItem.description));
 
+        if (feedItem.thumbnailUrl !=null)
+            Glide.with(context).load(feedItem.thumbnailUrl).into((ImageView)holder.itemView.findViewById(R.id.cardImageTextView));
 
-        Glide.with(context).load(feedItem.thumbnailUrl).into((ImageView)holder.itemView.findViewById(R.id.cardImageTextView));
+        try {
+            URL url = new URL(feedItem.link);
+            String a = "https://".concat(url.getAuthority().concat("/favicon.ico"));
+            Glide.with(context).load(a).into((ImageView)holder.itemView.findViewById(R.id.favicon));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

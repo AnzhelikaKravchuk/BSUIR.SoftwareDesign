@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,50 +9,70 @@
     android:layout_margin="15dp"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/cardTitleTextView"
+        <FrameLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+        <ImageView
+            android:id="@+id/cardImageTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="17sp"
-            android:textColor="@color/colorPrimaryDark"
-            android:textStyle="bold"
-            android:layout_margin="3dp"/>
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/meterial_nav"/>
+            <TextView
+                android:id="@+id/cardTitleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center|bottom"
+                android:background="#BB000000"
+                android:backgroundTint="@color/colorPrimaryDark"/>
+
+        </FrameLayout>
+
+
+
 
         <TextView
             android:id="@+id/cardTextTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/cardTitleTextView"
             android:maxLines="4"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textSize="15sp"
-            android:layout_margin="5dp"/>
+            android:layout_margin="10dp"/>
 
-        <ImageView
-            android:id="@+id/cardImageTextView"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_below="@+id/cardTextTextView"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/default_profile_photo"
-            android:layout_margin="5dp"/>
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/cardPubDateTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/cardImageTextView"
-            android:layout_marginEnd="10dp"
-            android:textAlignment="textEnd"
-            android:textStyle="italic"
-            android:textSize="13sp" />
+            <ImageView
+                android:id="@+id/favicon"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_rss_feed_black_24dp"
+                android:layout_width="20dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                tools:ignore="InvalidId">
+            </ImageView>
+            <TextView
+                android:id="@+id/cardPubDateTextView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textStyle="italic"
+                android:layout_margin="10dp" />
+        </LinearLayout>
 
 
-    </RelativeLayout>
+
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>
