@@ -36,7 +36,11 @@ public class NewsLoader extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        ProcessXML(getDocument());
+        try {
+            ProcessXML(getDocument());
+        } catch (Exception ex){
+            feedItems = null;
+        }
         return null;
     }
 

@@ -227,10 +227,16 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void updateUser(String uid, String email, String password, String name, String surname,
-                           String phoneNumber, String pathToPhoto, String currentPassword, String link) {
+                           String phoneNumber, String pathToPhoto, String currentPassword, final String link) {
         userManager.setOnUpdateResultListener(new UserManagementService.OnUpdateResultListener() {
+
+            final boolean needClearRssCache = !userManager.getCurrentUser().rssNewsUrl.equals(link);
             @Override
             public void OnUpdateResultSuccess() {
+
+                if (needClearRssCache){
+                    cacheManager.removeCache();
+                }
 
                 Toast.makeText(getApplicationContext(), "Updated successfully",
                         Toast.LENGTH_SHORT).show();

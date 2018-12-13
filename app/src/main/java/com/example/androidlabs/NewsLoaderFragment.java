@@ -58,6 +58,8 @@ public class NewsLoaderFragment extends Fragment {
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                ConnectivityManager connectivityManager = (ConnectivityManager) Objects.requireNonNull(getContext()).getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
                 if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()){
                     Toast.makeText(getContext(), "No internet connection", Toast.LENGTH_SHORT)
                             .show();
@@ -74,12 +76,38 @@ public class NewsLoaderFragment extends Fragment {
                         @Override
                         public void onLoadingEnd() {
                             ArrayList<News> feedItems = rssReader.getFeedItems();
+
+                            if (feedItems == null){
+                                Toast.makeText(getContext(), "Bad resource adress", Toast.LENGTH_SHORT).show();
+                                pullToRefresh.setRefreshing(false);
+                                return;
+                            }
+
+                            if (feedAdapter.getItemCount() == 0){
+                                for (int i = 0; i < feedItems.size(); i++){
+                                    feedAdapter.pushNews(feedItems.get(i), i);
+                                }
+                                recyclerView.setAdapter(feedAdapter);
+                                cacheManager.updateFeedItemsCache(feedItems);
+                                pullToRefresh.setRefreshing(false);
+                                return;
+                            }
+
                             int j = 0;
                             for (int i = 0; i < feedItems.size(); i++){
                                 if (!feedAdapter.getFeedItems().get(j).title
                                         .equals(feedItems.get(i).title)){
                                     feedAdapter.pushNews(feedItems.get(i), j);
                                     j++;
+                                } else {
+                                    break;
+                                }
+                            }
+                            j = feedAdapter.getItemCount() - 1;
+                            for (int i = feedItems.size() - 1; i >= 0; i--){
+                                if (!feedAdapter.getFeedItems().get(j).title
+                                        .equals(feedItems.get(i).title)){
+                                    feedAdapter.pushNews(feedItems.get(i), j + 1);
                                 } else {
                                     break;
                                 }
@@ -104,7 +132,7 @@ public class NewsLoaderFragment extends Fragment {
 
             cacheManager = CacheManager.getInstance();
             ConnectivityManager connectivityManager = (ConnectivityManager) Objects.requireNonNull(getContext()).getSystemService(Context.CONNECTIVITY_SERVICE);
-            activeNetwork = connectivityManager.getActiveNetworkInfo();
+            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
 
             if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
 
@@ -143,6 +171,8 @@ public class NewsLoaderFragment extends Fragment {
                 feedAdapter.setOnItemCLick(new NewsAdapter.OnItemClick() {
                     @Override
                     public void navigateToDetails(NewsLoaderFragmentDirections.ActionRssReaderFragmentToNewsDetails action) {
+                        ConnectivityManager connectivityManager = (ConnectivityManager) Objects.requireNonNull(getContext()).getSystemService(Context.CONNECTIVITY_SERVICE);
+                        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
                         if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
                             mListener.navigateToNewsDetails(action);
                         }
