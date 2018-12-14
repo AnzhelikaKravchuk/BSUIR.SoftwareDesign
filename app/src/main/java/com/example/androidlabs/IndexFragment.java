@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.androidlabs.businessLogic.UserManagementService;
-import com.example.androidlabs.dataAccess.entities.User;
+import com.example.androidlabs.businessLogic.models.User;
 
 public class IndexFragment extends Fragment {
 

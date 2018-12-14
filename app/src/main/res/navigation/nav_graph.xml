@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/newsDetails"
-        android:name="com.example.androidlabs.NewsDetails"
+        android:name="com.example.androidlabs.NewsInfoFragment"
         android:label="fragment_news_details"
         tools:layout="@layout/fragment_news_details" >
         <argument

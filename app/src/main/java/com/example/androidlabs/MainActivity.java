@@ -13,9 +13,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.androidlabs.businessLogic.CacheManager;
+import com.example.androidlabs.businessLogic.CacheStorageService;
 import com.example.androidlabs.businessLogic.UserManagementService;
-import com.example.androidlabs.dataAccess.entities.User;
+import com.example.androidlabs.businessLogic.models.User;
 import com.example.androidlabs.dataAccess.roomdDb.AppDatabase;
 import com.google.android.material.navigation.NavigationView;
 
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout mDrawerLayout;
     private NavController navController;
     private boolean navDataSet;
-    private CacheManager cacheManager;
+    private CacheStorageService cacheManager;
     public static User currentUser;
 
     private UserManagementService userManager;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
         ActionBar actionbar = getSupportActionBar();
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements
         navController = Navigation.findNavController(this, R.id.my_nav_host_fragment);
 
         userManager = new UserManagementService(appAdditionalInfoDatabase);
-        cacheManager = new CacheManager(appAdditionalInfoDatabase);
+        cacheManager = new CacheStorageService(appAdditionalInfoDatabase);
 
         setupNavigationView();
 
@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements
             navigateToSignInDestination(R.id.signInFragment);
         }
     }
+
+
 
     public void setupNavigationView(){
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -95,13 +97,72 @@ public class MainActivity extends AppCompatActivity implements
                 mDrawerLayout.closeDrawers();
                 switch (menuItem.getItemId()) {
                     case R.id.index_menu_item:
-                        navController.navigate(R.id.indexFragment);
+                        if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.editProfileFragment
+                                && ((EditProfileFragment) current).isUnsavedChanges()) {
+
+                            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                            dialogBuilder.setMessage("You have unstaged changes");
+                            dialogBuilder.setCancelable(false);
+                            dialogBuilder.setPositiveButton(
+                                    "Stay",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+
+                                        }
+                                    }
+                            );
+                            dialogBuilder.setNegativeButton(
+                                    "Discard",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            navController.navigate(R.id.indexFragment);
+
+                                        }
+                                    }
+                            );
+
+                            dialogBuilder.show();
+                        } else {
+
+                            navController.navigate(R.id.indexFragment);
+                        }
                         return true;
+
                     case R.id.About:
                         navController.navigate(R.id.About);
                         return true;
                     case R.id.first_menu_item:
-                        navController.navigate(R.id.profileFragment);
+                        if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.editProfileFragment
+                                && ((EditProfileFragment) current).isUnsavedChanges()) {
+
+                            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                            dialogBuilder.setMessage("You have unstaged changes");
+                            dialogBuilder.setCancelable(false);
+                            dialogBuilder.setPositiveButton(
+                                    "Stay",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+
+                                        }
+                                    }
+                            );
+                            dialogBuilder.setNegativeButton(
+                                    "Discard",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            navController.navigate(R.id.rssReaderFragment);
+
+                                        }
+                                    }
+                            );
+
+                            dialogBuilder.show();
+                        } else {
+
+                            navController.navigate(R.id.profileFragment);
+                        }
                         return true;
                     case R.id.rss_reader_menu_item:
                         if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.editProfileFragment
@@ -169,11 +230,13 @@ public class MainActivity extends AppCompatActivity implements
         mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
+                hideKeyboard();
             }
 
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                hideKeyboard();
             }
 
             @Override
@@ -183,6 +246,7 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onDrawerStateChanged(int newState) {
+                hideKeyboard();
                 ImageView navHeaderUserPhoto = findViewById(R.id.userImage);
 
                 if (userManager.getCurrentUser() != null) {
@@ -210,6 +274,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //setupImage();
@@ -218,7 +284,40 @@ public class MainActivity extends AppCompatActivity implements
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.about_button:
+                final NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
+                Fragment current = Objects.requireNonNull(navHostFragment).getChildFragmentManager().getFragments().get(0);
+                if (Objects.requireNonNull(navController.getCurrentDestination()).getId() == R.id.editProfileFragment
+                        && ((EditProfileFragment ) current).isUnsavedChanges()) {
 
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+                    dialogBuilder.setMessage("You have unstaged changes");
+                    dialogBuilder.setCancelable(false);
+                    dialogBuilder.setPositiveButton(
+                            "Stay",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                }
+                            }
+                    );
+                    dialogBuilder.setNegativeButton(
+                            "Discard",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    navController.navigate(R.id.About);
+
+                                }
+                            }
+                    );
+
+                    dialogBuilder.show();
+                } else {
+
+                    navController.navigate(R.id.About);
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -362,7 +461,11 @@ public class MainActivity extends AppCompatActivity implements
             super.onBackPressed();
         }
 
+
+
     }
+
+
 
 }
 

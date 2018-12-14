@@ -1,9 +1,8 @@
 package com.example.androidlabs.dataAccess.roomdDb.entities;
-import com.example.androidlabs.businessLogic.News;
+import com.example.androidlabs.businessLogic.models.News;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -17,7 +16,7 @@ public class NewsItem {
         this.title = feedItem.title;
         this.link = feedItem.link;
         this.description = feedItem.description;
-        this.pubDate = feedItem.pubDate;
+        this.publicationDate = feedItem.publicationDate;
         this.thumbnailUrl = feedItem.thumbnailUrl;
     }
 
@@ -28,7 +27,7 @@ public class NewsItem {
     public String title;
     public String link;
     public String description;
-    public String pubDate;
+    public String publicationDate;
     public String thumbnailUrl;
 
     public News toFeedItem(){
@@ -36,7 +35,7 @@ public class NewsItem {
                 this.title,
                 this.link,
                 this.description,
-                this.pubDate,
+                this.publicationDate,
                 this.thumbnailUrl
         ) ;
 

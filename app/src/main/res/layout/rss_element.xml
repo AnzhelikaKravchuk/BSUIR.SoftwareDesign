@@ -18,12 +18,12 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-        <ImageView
-            android:id="@+id/cardImageTextView"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/meterial_nav"/>
+            <ImageView
+                android:id="@+id/cardImageTextView"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/meterial_nav"/>
             <TextView
                 android:id="@+id/cardTitleTextView"
                 android:layout_width="match_parent"
@@ -32,10 +32,11 @@
                 android:textColor="@android:color/white"
                 android:layout_gravity="center|bottom"
                 android:background="#BB000000"
+                android:ellipsize="end"
+                android:maxLines="3"
                 android:backgroundTint="@color/colorPrimaryDark"/>
 
         </FrameLayout>
-
 
 
 
@@ -46,7 +47,9 @@
             android:maxLines="4"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textSize="15sp"
-            android:layout_margin="10dp"/>
+            android:minLines="5"
+            android:layout_margin="10dp"
+            />
 
 
         <LinearLayout

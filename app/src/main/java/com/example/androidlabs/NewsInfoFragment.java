@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -14,12 +15,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.util.Objects;
 
-public class NewsDetails extends Fragment {
+public class NewsInfoFragment extends Fragment {
 
-    public NewsDetails() {
+    public NewsInfoFragment() {
         // Required empty public constructor
     }
 
@@ -39,6 +41,17 @@ public class NewsDetails extends Fragment {
         });
         newDetailsWebView.loadUrl(Objects.requireNonNull(getArguments()).getString("newsUrl"));
 
+
+        androidx.appcompat.widget.Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
+
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
         return view;
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,8 +29,9 @@ import android.widget.RadioGroup;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.androidlabs.businessLogic.UserManagementService;
-import com.example.androidlabs.dataAccess.entities.User;
+import com.example.androidlabs.businessLogic.models.User;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -83,6 +85,15 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             userLinkEditText = view.findViewById(R.id.linkEditTextView);
             userLinkEditText.setText(currentUser.rssNewsUrl);
 
+            if (savedInstanceState != null && savedInstanceState.containsKey("userPhoto")){
+                byte[] byteArray = savedInstanceState.getByteArray("userPhoto");
+                Bitmap userPhoto = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                userPhotoImageView.setImageBitmap(userPhoto);
+                isNewPhotoUploaded = savedInstanceState.getBoolean("isNewPhotoUploaded");
+            } else {
+                userPhotoImageView.setImageBitmap(mListener.uploadProfilePhoto(currentUser.pathToPhoto));
+            }
+
             Button updateButton = view.findViewById(R.id.updateProfileButton);
             updateButton.setOnClickListener(this);
             userPhotoImageView.setOnClickListener(this);
@@ -90,21 +101,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
-    private void setupShowPasswordRadioGroup(RadioGroup showPasswordRadioGroup){
-        showPasswordRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
-                    case R.id.showPasswordRadioButton:
-                        userPasswordEditText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                        break;
-                    case R.id.hidePasswordRadioButton:
-                        userPasswordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                        break;
-                }
-            }
-        });
-    }
+
 
     private void setupUserNameEditText(EditText userNameEditTextInitial){
         this.userNameEditText = userNameEditTextInitial;
@@ -308,11 +305,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
 
     public interface OnFragmentInteractionListener {
-//        void popFromStackExcessDestination();
-//
-//        void navigateAfterSavingChanges(int nextDestinationId);
-//
-//        int getExcessDestinationId();
 
         void updateUser(String uid, String email, String password,
                         String name, String surname, String phoneNumber, String pathToPhoto,
@@ -429,6 +421,20 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
             mListener.updateUser(uid, email, password, name, surname, phoneNumber, pathToPhoto, "", editLink);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState){
+        if (isNewPhotoUploaded){
+            Bitmap photo = ((BitmapDrawable) userPhotoImageView.getDrawable()).getBitmap();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] photoByteArray = stream.toByteArray();
+            outState.putByteArray("userPhoto", photoByteArray);
+
+            outState.putBoolean("isNewPhotoUploaded", isNewPhotoUploaded);
+        }
+        super.onSaveInstanceState(outState);
     }
 
 }

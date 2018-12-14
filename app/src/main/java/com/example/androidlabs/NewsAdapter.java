@@ -1,9 +1,6 @@
 package com.example.androidlabs;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +10,12 @@ import android.widget.TextView;
 import com.example.androidlabs.businessLogic.UserManagementService;
 import com.bumptech.glide.Glide;
 
-import com.example.androidlabs.businessLogic.News;
-import com.example.androidlabs.dataAccess.entities.User;
+import com.example.androidlabs.businessLogic.models.News;
+import com.example.androidlabs.businessLogic.models.User;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -28,10 +26,10 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.AdapterViewHol
         return feedItems;
     }
 
-    private List<News> feedItems;
+    private ArrayList<News> feedItems;
     private Context context;
 
-    public NewsAdapter(Context context, List<News> feedItems) {
+    public NewsAdapter(Context context, ArrayList<News> feedItems) {
         this.feedItems = feedItems;
         this.context = context;
     }
@@ -47,13 +45,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.AdapterViewHol
         return new AdapterViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull AdapterViewHolder holder, int position) {
         UserManagementService userManager = UserManagementService.getInstance();
         User user = userManager.getCurrentUser();
         final News feedItem = feedItems.get(position);
         ((TextView)holder.itemView.findViewById(R.id.cardTitleTextView)).setText(feedItem.title);
-        ((TextView)holder.itemView.findViewById(R.id.cardPubDateTextView)).setText(feedItem.pubDate);
+        ((TextView)holder.itemView.findViewById(R.id.cardPubDateTextView)).setText(feedItem.publicationDate);
 
         if (user.rssNewsUrl.contains("news.google.com"))
             ((TextView)holder.itemView.findViewById(R.id.cardTextTextView)).setText(Html.fromHtml(feedItem.description));
@@ -72,7 +72,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.AdapterViewHol
             e.printStackTrace();
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

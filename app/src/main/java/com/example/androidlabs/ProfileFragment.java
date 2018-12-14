@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.androidlabs.businessLogic.UserManagementService;
-import com.example.androidlabs.dataAccess.entities.User;
+import com.example.androidlabs.businessLogic.models.User;
 
 
 public class ProfileFragment extends Fragment implements View.OnClickListener{

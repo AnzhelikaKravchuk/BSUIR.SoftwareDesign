@@ -9,13 +9,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.UserManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +24,13 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
-import com.example.androidlabs.businessLogic.CacheManager;
-import com.example.androidlabs.businessLogic.News;
-import com.example.androidlabs.businessLogic.NewsLoader;
+import com.example.androidlabs.businessLogic.CacheStorageService;
+import com.example.androidlabs.businessLogic.models.News;
+import com.example.androidlabs.businessLogic.NewsLoaderService;
 import com.example.androidlabs.businessLogic.UserManagementService;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -39,8 +40,7 @@ public class NewsLoaderFragment extends Fragment {
     private NewsAdapter feedAdapter;
     private ProgressBar rssReaderProgressBar;
 
-    private CacheManager cacheManager;
-    private NetworkInfo activeNetwork;
+    private CacheStorageService cacheManager;
     private UserManagementService userManager;
 
     private OnFragmentInteractionListener mListener;
@@ -66,8 +66,8 @@ public class NewsLoaderFragment extends Fragment {
                     pullToRefresh.setRefreshing(false);
                 } else {
 
-                    final NewsLoader rssReader = new NewsLoader(userManager.getCurrentUser().rssNewsUrl);
-                    rssReader.setOnLoadingNews(new NewsLoader.OnLoadingNews() {
+                    final NewsLoaderService rssReader = new NewsLoaderService(userManager.getCurrentUser().rssNewsUrl);
+                    rssReader.setOnLoadingNews(new NewsLoaderService.OnLoadingNews() {
                         @Override
                         public void onLoadingStart() {
 
@@ -88,15 +88,15 @@ public class NewsLoaderFragment extends Fragment {
                                     feedAdapter.pushNews(feedItems.get(i), i);
                                 }
                                 recyclerView.setAdapter(feedAdapter);
-                                cacheManager.updateFeedItemsCache(feedItems);
+                                cacheManager.updateNewsCache(feedItems);
                                 pullToRefresh.setRefreshing(false);
                                 return;
                             }
 
                             int j = 0;
                             for (int i = 0; i < feedItems.size(); i++){
-                                if (!feedAdapter.getFeedItems().get(j).title
-                                        .equals(feedItems.get(i).title)){
+                                if (!feedAdapter.getFeedItems().get(j).link
+                                        .equals(feedItems.get(i).link)){
                                     feedAdapter.pushNews(feedItems.get(i), j);
                                     j++;
                                 } else {
@@ -105,8 +105,8 @@ public class NewsLoaderFragment extends Fragment {
                             }
                             j = feedAdapter.getItemCount() - 1;
                             for (int i = feedItems.size() - 1; i >= 0; i--){
-                                if (!feedAdapter.getFeedItems().get(j).title
-                                        .equals(feedItems.get(i).title)){
+                                if (!feedAdapter.getFeedItems().get(j).link
+                                        .equals(feedItems.get(i).link)){
                                     feedAdapter.pushNews(feedItems.get(i), j + 1);
                                 } else {
                                     break;
@@ -130,7 +130,7 @@ public class NewsLoaderFragment extends Fragment {
             recyclerView = view.findViewById(R.id.recyclerView);
             rssReaderProgressBar = view.findViewById(R.id.rssReaderProgressBar);
 
-            cacheManager = CacheManager.getInstance();
+            cacheManager = CacheStorageService.getInstance();
             ConnectivityManager connectivityManager = (ConnectivityManager) Objects.requireNonNull(getContext()).getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
 
@@ -139,7 +139,7 @@ public class NewsLoaderFragment extends Fragment {
                 if (userManager.getCurrentUser().rssNewsUrl == null) {
                     showChooseUrlRssDialog(view);
                 } else {
-                    NewsLoader rssReader = new NewsLoader(userManager.getCurrentUser().rssNewsUrl);
+                    NewsLoaderService rssReader = new NewsLoaderService(userManager.getCurrentUser().rssNewsUrl);
                     loadNewsOnline(rssReader, view);
                 }
             } else {
@@ -147,11 +147,18 @@ public class NewsLoaderFragment extends Fragment {
                 loadNewsOffline(view);
             }
         }
+
+        androidx.appcompat.widget.Toolbar toolbar = getActivity().findViewById(R.id.toolbar_main);
+
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_menu_black_24dp);
+
+
         return view;
     }
 
-    private void loadNewsOnline(final NewsLoader rssReader, final View view) {
-        rssReader.setOnLoadingNews(new NewsLoader.OnLoadingNews() {
+    private void loadNewsOnline(final NewsLoaderService rssReader, final View view) {
+        rssReader.setOnLoadingNews(new NewsLoaderService.OnLoadingNews() {
             @Override
             public void onLoadingStart() {
                 rssReaderProgressBar.setVisibility(View.VISIBLE);
@@ -160,12 +167,17 @@ public class NewsLoaderFragment extends Fragment {
             @Override
             public void onLoadingEnd() {
                 ArrayList<News> feedItems = rssReader.getFeedItems();
-                ArrayList<News> feedCacheItems = cacheManager.getItemsFromCache();
-
-                if (feedItems.size() != 0 && (feedCacheItems.size() == 0
-                        || (!feedCacheItems.get(0).title.equals(feedItems.get(0).title)))) {
-                    cacheManager.updateFeedItemsCache(feedItems);
+                if (feedItems == null){
+                    Toast.makeText(getContext(), "Bad resource adress", Toast.LENGTH_SHORT).show();
+                    rssReaderProgressBar.setVisibility(View.GONE);
+                    return;
                 }
+                ArrayList<News> feedCacheItems = cacheManager.getNewsFromCache();
+
+                if (feedItems.size() != 0 && (feedCacheItems.size() == 0 || (!feedCacheItems.get(0).link.equals(feedItems.get(0).link)))) {
+                    cacheManager.updateNewsCache(feedItems);
+                }
+                cacheManager.updateNewsCache(feedItems);
 
                 feedAdapter = new NewsAdapter(getContext(), feedItems);
                 feedAdapter.setOnItemCLick(new NewsAdapter.OnItemClick() {
@@ -186,10 +198,10 @@ public class NewsLoaderFragment extends Fragment {
                     }
                 });
 
-                if (
-                    Objects.requireNonNull(getActivity()).getResources().getConfiguration().orientation == 2
-                ) {
-                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+                if (getActivity() != null
+                        && getActivity().getResources().getConfiguration().orientation == 2
+                        ) {
+                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
                 } else {
                     recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 }
@@ -201,17 +213,24 @@ public class NewsLoaderFragment extends Fragment {
     }
 
     private void loadNewsOffline(View view) {
-        ArrayList<News> feedCacheItems = cacheManager.getItemsFromCache();
+        ArrayList<News> feedCacheItems = cacheManager.getNewsFromCache();
         view.findViewById(R.id.rssReaderProgressBar).setVisibility(View.VISIBLE);
         feedAdapter = new NewsAdapter(getContext(), feedCacheItems);
-            feedAdapter.setOnItemCLick(new NewsAdapter.OnItemClick() {
+        feedAdapter.setOnItemCLick(new NewsAdapter.OnItemClick() {
             @Override
             public void navigateToDetails(NewsLoaderFragmentDirections.ActionRssReaderFragmentToNewsDetails action) {
-                Toast.makeText(
-                        getContext(),
-                        "No internet connection",
-                        Toast.LENGTH_SHORT
-                ).show();
+                ConnectivityManager connectivityManager = (ConnectivityManager) Objects.requireNonNull(getContext()).getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+                if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
+                    mListener.navigateToNewsDetails(action);
+                }
+                else {
+                    Toast.makeText(
+                            getContext(),
+                            "No internet connection",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
             }
         });
         if (Objects.requireNonNull(getActivity()).getResources().getConfiguration().orientation == 2) {
@@ -243,7 +262,7 @@ public class NewsLoaderFragment extends Fragment {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         userManager.updateUserRssUrl(rssUrlNewsEditText.getText().toString());
-                        NewsLoader rssReader = new NewsLoader(
+                        NewsLoaderService rssReader = new NewsLoaderService(
                                 userManager.getCurrentUser().rssNewsUrl
                         );
                         loadNewsOnline(rssReader, view);
@@ -258,7 +277,7 @@ public class NewsLoaderFragment extends Fragment {
                         userManager.updateUserRssUrl(
                                 "https://news.google.com/_/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx1YlY4U0FtVnVHZ0pWVXlnQVAB?hl=en-US&gl=US&ceid=US:en"
                         );
-                        NewsLoader rssReader = new NewsLoader(
+                        NewsLoaderService rssReader = new NewsLoaderService(
                                 userManager.getCurrentUser().rssNewsUrl
                         );
                         loadNewsOnline(rssReader, view);
@@ -289,10 +308,11 @@ public class NewsLoaderFragment extends Fragment {
     public interface OnFragmentInteractionListener {
 
         void navigateToNewsDetails(
-                // RssReaderFragmentDirections.ActionRssReaderFragmentToNewsDetails actionRssReaderFragmentToNewsDetails
-                NewsLoaderFragmentDirections.ActionRssReaderFragmentToNewsDetails action);
+                NewsLoaderFragmentDirections.ActionRssReaderFragmentToNewsDetails actionRssReaderFragmentToNewsDetails
+        );
 
         void navigateToSignInDestination(int nextDestinationId);
     }
+
 
 }

@@ -1,6 +1,6 @@
 package com.example.androidlabs.businessLogic;
 
-import com.example.androidlabs.dataAccess.entities.User;
+import com.example.androidlabs.businessLogic.models.User;
 import com.example.androidlabs.dataAccess.roomdDb.AppDatabase;
 import com.example.androidlabs.dataAccess.roomdDb.entities.UserAdditionalInfo;
 import com.google.android.gms.tasks.OnCompleteListener;

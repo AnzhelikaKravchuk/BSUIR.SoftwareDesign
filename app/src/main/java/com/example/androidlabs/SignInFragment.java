@@ -159,6 +159,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener {
                         userEmailEditText.getText().toString(),
                         userPasswordEditText.getText().toString()
                 );
+
+
                 break;
         }
 

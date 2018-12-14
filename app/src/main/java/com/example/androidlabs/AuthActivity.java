@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.example.androidlabs.businessLogic.UserManagementService;
@@ -26,7 +28,6 @@ public class AuthActivity extends AppCompatActivity implements
     private EditText userEmailEditText;
     private EditText userPasswordEditText;
     private UserManagementService userManager;
-    //private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class AuthActivity extends AppCompatActivity implements
         ).allowMainThreadQueries().build();
 
         userManager = new UserManagementService(appAdditionalInfoDatabase);
-        //navController = Navigation.findNavController(this, R.id.my_nav_host_fragment);
+
         if (userManager.isUserSignedIn())
         {
             Intent mainActivityIntent = new Intent(this, MainActivity.class);
@@ -48,7 +49,7 @@ public class AuthActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_auth);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.my_nav_host_fragment, new SignInFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.my_nav_host_fragment1, new SignInFragment()).commit();
 
 
     }
@@ -61,7 +62,7 @@ public class AuthActivity extends AppCompatActivity implements
         userManager.setOnCreationResultListener(new UserManagementService.OnCreationResultListener() {
             @Override
             public void onCreationResultSuccess() {
-                //tearDownProgressBar(R.id.signInProgressBar);
+                tearDownProgressBar(R.id.CreateProgressBar);
                 Toast.makeText(
                         getApplicationContext(),
                         "You are welcome.",
@@ -70,6 +71,7 @@ public class AuthActivity extends AppCompatActivity implements
                 Intent mainActivityIntent = new Intent(AuthActivity.this, MainActivity.class);
                 startActivity(mainActivityIntent);
                 finish();
+
             }
 
             @Override
@@ -82,12 +84,12 @@ public class AuthActivity extends AppCompatActivity implements
                 ).show();
             }
         });
+        setUpProgressBar(R.id.CreateProgressBar,  findViewById(R.id.layoutCreate));
         userManager.createUser(
                 email, password,
                 name, surname,
                 phoneNUmber, pathToPhoto);
-        //hideKeyboard();
-        //setupImage();
+        hideKeyboard();
     }
 
     @Override
@@ -102,7 +104,7 @@ public class AuthActivity extends AppCompatActivity implements
         //navController.navigate(R.id.CreateProfileFragment);
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        fragmentManager.beginTransaction().replace(R.id.my_nav_host_fragment, new CreateProfileFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.my_nav_host_fragment1, new CreateProfileFragment()).commit();
 
     }
 
@@ -120,6 +122,7 @@ public class AuthActivity extends AppCompatActivity implements
                 ).show();
                 Intent mainActivityIntent = new Intent(AuthActivity.this, MainActivity.class);
                 startActivity(mainActivityIntent);
+
             }
 
             @Override
@@ -133,13 +136,15 @@ public class AuthActivity extends AppCompatActivity implements
                 tearDownProgressBar(R.id.editProgressBar);
             }
         });
-        setUpProgressBar(R.id.signInProgressBar);
+        setUpProgressBar(R.id.signInProgressBar, findViewById(R.id.layoutCreate));
         userManager.signInUser(email, password);
         hideKeyboard();
     }
 
-    private void setUpProgressBar(int progressBarId){
+    private void setUpProgressBar(int progressBarId, View view){
         ProgressBar progressBar = findViewById(progressBarId);
+        View layout = view;
+        layout.setBackgroundResource(R.drawable.grey_screen);
         progressBar.setVisibility(View.VISIBLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
